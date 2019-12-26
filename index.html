@@ -3,34 +3,60 @@
 	<head>
 		<title>Communist Bomb</title>
 		<link rel="stylesheet" href="style.css">
+		<meta charset="UTF-8">
 	</head>
 	<body>
 		
+		<h1>距離學測剩餘:</h1>
 		<!-- <span style ="font-size:50px; font-family:sans-serif; text-align: right;"><h1></h1></span> -->
 		
-		<span style ="font-size:250px; font-family:Digital; text-align: right;"><br>
-			<p id="time_span"></p></span>
+		<!-- <span style ="font-size:200px; font-family:Digital; text-align: right;"><br>
+			<p id="time_span"></p>
+		</span> -->
+		<span style ="font-size:190px; font-family:Verdana; text-align: right;"><br>
+			<p id="countdown_time"></p>
+		</span>
+		
 			<script>
 				function updateTime(){
-				var currentTime = new Date()
-				var hours = currentTime.getHours()
-				var minutes = currentTime.getMinutes()
-				var second = currentTime.getSeconds()
-				if (minutes < 10){
-				minutes = "0" + minutes
+				var currentTime = new Date();
+				var examTime = new Date("Jan 17, 2020");
+				var nowHours = currentTime.getHours();
+				var nowMinutes = currentTime.getMinutes();
+				var nowSeconds = currentTime.getSeconds();
+				if (nowMinutes < 10){
+				nowMinutes = "0" + nowMinutes;
 				}
-				if (second < 10){
-				second = "0" + second
+				if (nowSeconds < 10){
+				nowSeconds = "0" + nowSeconds;
 				}
-				var t_str = hours + ":" + minutes + ":" + second + ' ';
-				// if(hours > 11){
-				// t_str += "PM";
-				// } else {
-				// t_str += "AM";
-				// }
-				document.getElementById('time_span').innerHTML = t_str;
+				var t_str = nowHours + ":" + nowMinutes + ":" + nowSeconds + ' ';
+				
+				var distance = examTime.getTime() - currentTime.getTime();
+
+				var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+  				var countdownHrs = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  				var countdownMin = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+				var countdownSec = Math.floor((distance % (1000 * 60)) / 1000);
+				if(countdownHrs < 10){
+					countdownHrs = "0" + countdownHrs
+				}
+				if (countdownMin < 10){
+				countdownMin = "0" + countdownMin;
+				}
+				if (countdownSec < 10){
+				countdownSec = "0" + countdownSec;
+				}
+
+				var cd_str = days + ":" + countdownHrs + ":" + countdownMin + ":" + countdownSec;
+
+				// document.getElementById('time_span').innerHTML = t_str;
+				document.getElementById('countdown_time').innerHTML = cd_str;
 				}
 				setInterval(updateTime, 1000);
 			</script>
+			<!-- <audio controls autoplay>
+				<source src="soviet_anthem.mp3" type="audio/mpeg">
+			</audio> -->
 		</body>
 	</html>
