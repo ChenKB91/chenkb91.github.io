@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Communist Bomb</title>
+		<link rel="stylesheet" href="style.css">
+	</head>
+	<body>
+		
+		<!-- <span style ="font-size:50px; font-family:sans-serif; text-align: right;"><h1></h1></span> -->
+		
+		<span style ="font-size:250px; font-family:Digital; text-align: right;"><br>
+			<p id="time_span"></p></span>
+			<script>
+				function updateTime(){
+				var currentTime = new Date()
+				var hours = currentTime.getHours()
+				var minutes = currentTime.getMinutes()
+				var second = currentTime.getSeconds()
+				if (minutes < 10){
+				minutes = "0" + minutes
+				}
+				if (second < 10){
+				second = "0" + second
+				}
+				var t_str = hours + ":" + minutes + ":" + second + ' ';
+				// if(hours > 11){
+				// t_str += "PM";
+				// } else {
+				// t_str += "AM";
+				// }
+				document.getElementById('time_span').innerHTML = t_str;
+				}
+				setInterval(updateTime, 1000);
+			</script>
+		</body>
+	</html>

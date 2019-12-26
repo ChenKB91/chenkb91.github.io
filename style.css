@@ -1,0 +1,9 @@
+body {
+ background: #000000 url("huagua3.gif") center center fixed no-repeat;
+ background-size: cover;
+ color: #F00;
+ text-shadow: 10px 10px 0px black;
+}
+p{
+	background-color: rgba(1, 1, 1, 0.3);
+}
