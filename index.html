@@ -7,20 +7,21 @@
 	</head>
 	<body>
 		
-		<h1>距離學測剩餘:</h1>
+		<h1><p id="rand_text"></p><br><br><br><br></h1>
 		<!-- <span style ="font-size:50px; font-family:sans-serif; text-align: right;"><h1></h1></span> -->
 		
 		<!-- <span style ="font-size:200px; font-family:Digital; text-align: right;"><br>
 			<p id="time_span"></p>
 		</span> -->
-		<span style ="font-size:190px; font-family:Verdana; text-align: right;"><br>
+		<span style ="font-size:163px; font-family:Verdana; text-align: center;"><br>
 			<p id="countdown_time"></p>
 		</span>
 		
+			<IMG STYLE="position:absolute; TOP:150px; LEFT:650px; WIDTH:350px; HEIGHT:350px" SRC="spinning_comm.gif">
 			<script>
 				function updateTime(){
 				var currentTime = new Date();
-				var examTime = new Date("Jan 17, 2020");
+				var examTime = new Date("Jan 17, 2020 8:00:00");
 				var nowHours = currentTime.getHours();
 				var nowMinutes = currentTime.getMinutes();
 				var nowSeconds = currentTime.getSeconds();
@@ -48,11 +49,22 @@
 				countdownSec = "0" + countdownSec;
 				}
 
-				var cd_str = days + ":" + countdownHrs + ":" + countdownMin + ":" + countdownSec;
+				var cd_str = days + "d " + countdownHrs + ":" + countdownMin + ":" + countdownSec + " ";
 
 				// document.getElementById('time_span').innerHTML = t_str;
 				document.getElementById('countdown_time').innerHTML = cd_str;
 				}
+				var textArray = [
+  				'距離禹廷爆炸剩餘:',
+    			'學測倒數:',
+    			'學測倒數:',
+    			'學測倒數:',
+    			'學測倒數:'
+				];
+				var randomNumber = Math.floor(Math.random()*textArray.length);
+
+				document.getElementById('rand_text').innerHTML = textArray[randomNumber];
+				
 				setInterval(updateTime, 1000);
 			</script>
 			<!-- <audio controls autoplay>
