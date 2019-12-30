@@ -40,7 +40,7 @@
   				var countdownMin = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
 				var countdownSec = Math.floor((distance % (1000 * 60)) / 1000);
 				if(countdownHrs < 10){
-					countdownHrs = "0" + countdownHrs
+					countdownHrs = "0" + countdownHrs;
 				}
 				if (countdownMin < 10){
 				countdownMin = "0" + countdownMin;
@@ -49,18 +49,17 @@
 				countdownSec = "0" + countdownSec;
 				}
 
-				var cd_str = days + "d " + countdownHrs + ":" + countdownMin + ":" + countdownSec + " ";
+				var cd_str = days + "D " + countdownHrs + ":" + countdownMin + ":" + countdownSec + " ";
 
 				// document.getElementById('time_span').innerHTML = t_str;
 				document.getElementById('countdown_time').innerHTML = cd_str;
 				}
 				var textArray = [
-  				'距離禹廷爆炸剩餘:',
-    			'學測倒數:',
-    			'學測倒數:',
-    			'學測倒數:',
-    			'學測倒數:'
-				];
+  						'距離禹廷爆炸剩餘:',
+    						'學測倒數:',
+    						'學測倒數:',
+    						'學測倒數:',
+    						'學測倒數:'];
 				var randomNumber = Math.floor(Math.random()*textArray.length);
 
 				document.getElementById('rand_text').innerHTML = textArray[randomNumber];
