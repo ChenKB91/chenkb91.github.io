@@ -1,0 +1,36 @@
+---
+layout: default
+title: Archive
+---
+
+<div>
+
+  <h2 style="font-family: 'Ubuntu'">Archive</h2>
+
+  <section class="archive_list">
+    
+    {% for post in site.posts %}
+      {% assign currentdate = post.date | date: "%Y" %}
+      {% if currentdate != date %}
+        <div class="category-name">
+          <h2>{{ currentdate }}</h2>
+        </div>
+        {% assign date = currentdate %} 
+      {% endif %}
+    <div class="post_title">
+      <span class="date">{{ post.date | date: "%b %d" }}</span>
+      <a href="{{ post.url | prepend: site.baseurl }}">{{post.title}}</a>
+    </div>
+
+    {% endfor %}
+
+    
+
+  </section>
+
+  <!-- <footer class="article-footer" mar>
+    {% include author.html %}
+  </footer> -->
+</div>
+
+
