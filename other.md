@@ -4,6 +4,10 @@ title:  "Other projects"
 permalink: "/other/"
 ---
 
-## TBD
+Theres really not much here, so idk why you'rereading this
+
+## General Cousrse filtering for NTU
+WIP, but probably will never finish
+https://chenkb91.github.io/better_courses
 
 [My Github](https://github.com/ChenKB91)
