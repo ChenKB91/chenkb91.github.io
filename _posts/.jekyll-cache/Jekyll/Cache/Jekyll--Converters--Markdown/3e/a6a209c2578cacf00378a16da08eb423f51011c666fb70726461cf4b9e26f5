@@ -1,0 +1,129 @@
+I"�)<p>本次的作業主題為網路封包分析工具，以及Shell script。我主要用Wireshark來做這題，<del>因為我太廢不會用tcp dump</del>，Shell script的部分時間有點趕沒寫DFS的部分，然後前面的一些地方也可能有錯Q_Q
+<!--description--></p>
+
+<h2 id="na">NA</h2>
+
+<h4 id="野生的密碼難道會在網路上赤裸地奔馳著">野生的密碼難道會在網路上赤裸地奔馳著？</h4>
+
+<ol>
+  <li>
+    <p>We can simply filter by http and get this, since http don’t do encryption:</p>
+
+    <p><img src="assets/img/2021-06-29/httppw.png" style="zoom: 67%;" /></p>
+  </li>
+  <li>
+    <p>This version uses https, which encrypts requests &amp; responses, so we can’t get our password from Wireshark.</p>
+
+    <p><img src="assets/img/2021-06-29/https.png" alt="https" style="zoom:67%;" /></p>
+  </li>
+</ol>
+
+<h4 id="好玩遊戲也有暗潮洶湧的一面">好玩遊戲也有暗潮洶湧的一面</h4>
+
+<ol>
+  <li>
+    <p>We can use the “Conversations &gt; Follow Stream” to inspect these conversations:</p>
+
+    <p><img src="assets/img/2021-06-29/stream.png" alt="stream" style="zoom:67%;" /></p>
+
+    <p>We can also view only data sent by our side:</p>
+
+    <p><img src="assets/img/2021-06-29/client.png" style="zoom:67%;" /></p>
+
+    <p>So basically, the game server sent us the time, the ball and the pad’s location, and the client send directions when we press move.</p>
+  </li>
+  <li>
+    <p>If we pay attention to the conversations page, we can notice at some point there’s another conversation happening on port 9394:</p>
+
+    <p><img src="assets/img/2021-06-29/conversations.png" alt="conversations" /></p>
+
+    <p>And when we look into it we’ll discover this:</p>
+
+    <p><img src="assets/img/2021-06-29/secret.png" style="zoom:67%;" /></p>
+
+    <p>So we know the game steals our .bash_history.</p>
+  </li>
+  <li>
+    <p>We repeat the above steps with the pcap:</p>
+
+    <p><img src="assets/img/2021-06-29/secret2.png" alt="secret2" style="zoom:67%;" /></p>
+
+    <p><code class="language-plaintext highlighter-rouge">PASSWORD=WoBuHueA_WoJiouJenDeBuHueA</code></p>
+  </li>
+  <li>
+    <p>I wrote a quick python program to communicate with the server, since we already know the port and the format:</p>
+
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">socket</span>
+<span class="n">host</span> <span class="o">=</span> <span class="s">'127.0.0.1'</span>
+<span class="n">port</span> <span class="o">=</span> <span class="mi">9393</span>
+   
+<span class="k">with</span> <span class="n">socket</span><span class="p">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="p">.</span><span class="n">AF_INET</span><span class="p">,</span><span class="n">socket</span><span class="p">.</span><span class="n">SOCK_STREAM</span><span class="p">)</span> <span class="k">as</span> <span class="n">s</span><span class="p">:</span>
+  <span class="n">s</span><span class="p">.</span><span class="n">connect</span><span class="p">((</span><span class="n">host</span><span class="p">,</span><span class="n">port</span><span class="p">))</span>
+  <span class="k">print</span><span class="p">(</span><span class="s">'connected'</span><span class="p">)</span>
+  <span class="n">s</span><span class="p">.</span><span class="n">sendall</span><span class="p">(</span><span class="s">b'start fast'</span><span class="p">)</span>
+  <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">1024</span><span class="p">).</span><span class="n">decode</span><span class="p">(</span><span class="s">'ascii'</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s">'hori'</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+      <span class="c1"># Stop when recieving anything not game data
+</span>      <span class="k">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+      <span class="k">break</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="s">'</span><span class="se">\n</span><span class="s">'</span><span class="p">)</span>
+      <span class="c1"># Make sure it don't explode when server asks for secret
+</span>      <span class="n">plus</span> <span class="o">=</span> <span class="mi">0</span>
+      <span class="k">if</span> <span class="s">'secret'</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+        <span class="n">plus</span> <span class="o">=</span> <span class="mi">1</span>
+           
+      <span class="n">x</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="o">+</span><span class="n">plus</span><span class="p">].</span><span class="n">split</span><span class="p">(</span><span class="s">' '</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+      <span class="n">y</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="o">+</span><span class="n">plus</span><span class="p">].</span><span class="n">split</span><span class="p">(</span><span class="s">' '</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+      <span class="n">bx</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">2</span><span class="o">+</span><span class="n">plus</span><span class="p">].</span><span class="n">split</span><span class="p">(</span><span class="s">' '</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+      <span class="n">by</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">3</span><span class="o">+</span><span class="n">plus</span><span class="p">].</span><span class="n">split</span><span class="p">(</span><span class="s">' '</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+      <span class="n">t</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">4</span><span class="o">+</span><span class="n">plus</span><span class="p">].</span><span class="n">split</span><span class="p">(</span><span class="s">' '</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+   		
+      <span class="k">if</span> <span class="n">x</span><span class="o">&lt;</span><span class="n">bx</span><span class="p">:</span> <span class="n">s</span><span class="p">.</span><span class="n">sendall</span><span class="p">(</span><span class="s">b'Move: right'</span><span class="p">);</span><span class="k">print</span><span class="p">(</span><span class="s">'r'</span><span class="p">)</span>
+      <span class="k">elif</span> <span class="n">x</span><span class="o">&gt;</span><span class="n">bx</span><span class="p">:</span> <span class="n">s</span><span class="p">.</span><span class="n">sendall</span><span class="p">(</span><span class="s">b'Move: left'</span><span class="p">);</span><span class="k">print</span><span class="p">(</span><span class="s">'l'</span><span class="p">)</span>
+      <span class="k">elif</span> <span class="n">y</span><span class="o">&gt;</span><span class="n">by</span><span class="p">:</span> <span class="n">s</span><span class="p">.</span><span class="n">sendall</span><span class="p">(</span><span class="s">b'Move: up'</span><span class="p">);</span><span class="k">print</span><span class="p">(</span><span class="s">'u'</span><span class="p">)</span>
+      <span class="k">elif</span> <span class="n">y</span><span class="o">&lt;</span><span class="n">by</span><span class="p">:</span> <span class="n">s</span><span class="p">.</span><span class="n">sendall</span><span class="p">(</span><span class="s">b'Move: down'</span><span class="p">);</span><span class="k">print</span><span class="p">(</span><span class="s">'d'</span><span class="p">)</span>
+</code></pre></div>    </div>
+
+    <p>Got the flag: <code class="language-plaintext highlighter-rouge">HW1{d0_y0u_knovv_wH0_KaienLin_1s?}</code></p>
+
+    <p><img src="assets/img/2021-06-29/winbypy.png" alt="winbypy" style="zoom:80%;" /></p>
+  </li>
+  <li>
+    <p>I’m too lazy to modify the program to play with 2 balls… Using <code class="language-plaintext highlighter-rouge">netstat -tulpn</code> we can find the server running on port 9393, then copy it. We already know the flag format, so…</p>
+
+    <p><img src="assets/img/2021-06-29/stringsgrep.png" alt="" /></p>
+
+    <p>I’m sorry QAQ Flag: <code class="language-plaintext highlighter-rouge">HW1{Dou8l3_b@ll_d0uB1e_Fun!}</code></p>
+  </li>
+</ol>
+
+<h4 id="這麼多的網路協定要是能全部都認識的話該有多好">這麼多的網路協定要是能全部都認識的話該有多好</h4>
+
+<ol>
+  <li>
+    <p><img src="assets/img/2021-06-29/ICMP.png" alt="" /></p>
+
+    <p>ICMP, or the Internet Control Message Protocol is used to send error messages and other informations, for figuring out networking issues. It is built on the Network Layer.</p>
+  </li>
+  <li>
+    <p><img src="assets/img/2021-06-29/DNS.png" alt="" /></p>
+  </li>
+</ol>
+
+<p>DNS protocol is used to communicate with DNS servers, and figure out a domain’s IP address. It is built on the Application Layer.</p>
+
+<ol>
+  <li>
+    <p><img src="assets/img/2021-06-29/ARP.png" alt="" /></p>
+
+    <p>The ARP protocol, or the Address Resolution Protocol, is used to in a local network to communicate MAC addresses. It is built on the Data Link Layer.</p>
+  </li>
+  <li>
+    <p><img src="assets/img/2021-06-29/DHCP.png" alt="" /></p>
+  </li>
+</ol>
+
+<p>DHCP protocol, or Dynaic Host Configuration Protocol, is used to communicate with DHCP servers when connecting to it. It handles the process of getting an IP address inside a network.</p>
+:ET
