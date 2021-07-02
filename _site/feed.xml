@@ -5,9 +5,117 @@
     <description>Notes, blogs, random posts about random things</description>
     <link>http://chenkb91.github.io/</link>
     <atom:link href="http://chenkb91.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 30 Jun 2021 00:52:18 +0800</pubDate>
-    <lastBuildDate>Wed, 30 Jun 2021 00:52:18 +0800</lastBuildDate>
+    <pubDate>Fri, 02 Jul 2021 16:28:51 +0800</pubDate>
+    <lastBuildDate>Fri, 02 Jul 2021 16:28:51 +0800</lastBuildDate>
     <generator>Jekyll v4.1.1</generator>
+    
+      <item>
+        <title>How to quickly setup an Archlinux VM</title>
+        <description>&lt;p&gt;測試東西的時候常需要一個很簡單的 Linux VM，剛好 Arch 的檔案小，安裝速度也快，為了以後不要再採坑，寫了這篇筆記來簡單紀錄一下怎麼用 Live iso 安裝 Archlinux.
+&lt;!--description--&gt;&lt;/p&gt;
+
+&lt;p&gt;本篇文章從&lt;a href=&quot;https://wiki.archlinux.org/title/Installation_guide&quot;&gt;官網教學&lt;/a&gt;節錄而來，使用 &lt;strong&gt;BIOS&lt;/strong&gt; 系統（大部分VM軟體預設是這個）的安裝過程。打開你喜歡的 VM 軟體，用抓下來的 Live iso 開機之後，進行以下步驟。&lt;/p&gt;
+
+&lt;h1 id=&quot;步驟&quot;&gt;步驟&lt;/h1&gt;
+
+&lt;h2 id=&quot;disk-partition&quot;&gt;Disk Partition&lt;/h2&gt;
+
+&lt;p&gt;先用&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;lsblk&lt;/code&gt;看一下你的磁碟叫什麼名字，然後進行分割的動作:&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;fdisk /dev/sda   &lt;span class=&quot;c&quot;&gt;# Or whatever the disk is called&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;我們需要至少三個Partition:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;1MB for &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;BIOS Boot&lt;/code&gt; (No need to choose type)&lt;/li&gt;
+  &lt;li&gt;256MB Swap, choose &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;swap&lt;/code&gt; type in fdisk&lt;/li&gt;
+  &lt;li&gt;Use rest of the space as one partition&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;formatting&quot;&gt;Formatting&lt;/h3&gt;
+&lt;p&gt;再來我們需要把這些 Partition 格式化。&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;mkswap /dev/sda2  &lt;span class=&quot;c&quot;&gt;# 處理swap&lt;/span&gt;
+swapon /dev/sda2
+mkfs.ext4 /dev/sda3 &lt;span class=&quot;c&quot;&gt;# 建立檔案系統&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;然後掛載到&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/mnt&lt;/code&gt;。&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;mount /dev/sda3 /mnt&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;install-using-pacstrap&quot;&gt;Install using pacstrap&lt;/h2&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;pacstrap /mnt ...&lt;/code&gt; 可以幫我們裝好很多東西。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;TL;DR&lt;/strong&gt;: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;pacstrap /mnt base linux linux-firmware networkmanager grub sudo vim&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;解釋一下：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;基本的 Linux 要用的東西: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;base linux linux-firmware&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;網路自動設定，不然會連不到: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;networkmanager&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;既然都要裝東西了那就順便: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;grub sudo vim&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;fstab-arch-chroot-systemd&quot;&gt;fstab, arch-chroot, systemd&lt;/h2&gt;
+
+&lt;p&gt;設定開機自動mount，並設定網路。接下來的步驟要在新的檔案系統裡做，所以要&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;arch-chroot&lt;/code&gt;：&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;genfstab &lt;span class=&quot;nt&quot;&gt;-U&lt;/span&gt; /mnt &lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt; /mnt/etc/fstab
+arch-chroot /mnt
+systemctl &lt;span class=&quot;nb&quot;&gt;enable &lt;/span&gt;NetworkManager
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;user-and-password&quot;&gt;User and password&lt;/h2&gt;
+
+&lt;p&gt;設定root的密碼，建立新的使用者。&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;passwd  &lt;span class=&quot;c&quot;&gt;# change root pw&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# 如果你要建立使用者的話才做，不用的話可以跳過&lt;/span&gt;
+useradd ckb &lt;span class=&quot;c&quot;&gt;# 當然你要把ckb換成自己的使用者名稱&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;mkdir&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-p&lt;/span&gt; /home/ckb
+&lt;span class=&quot;nb&quot;&gt;chown &lt;/span&gt;ckb:ckb /home/ckb
+visudo &lt;span class=&quot;c&quot;&gt;# if you want to give it sudo, add line: ckb ALL=(ALL) ALL&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;grub&quot;&gt;GRUB&lt;/h2&gt;
+
+&lt;p&gt;裝Grub，要不然開不了機。&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# use lsblk to check where the bios partition is at (the 1MB one)&lt;/span&gt;
+grub-install &lt;span class=&quot;nt&quot;&gt;--target&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;i386-pc /dev/sda1
+grub-mkconfig &lt;span class=&quot;nt&quot;&gt;-o&lt;/span&gt; /boot/grub/grub.cfg
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;finishing-up&quot;&gt;Finishing up&lt;/h2&gt;
+
+&lt;p&gt;退出arch-chroot，然後重新開機。&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;exit&lt;/span&gt; &lt;span class=&quot;c&quot;&gt;# from chroot&lt;/span&gt;
+umount &lt;span class=&quot;nt&quot;&gt;-R&lt;/span&gt; /mnt
+reboot
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;這樣子就裝好了，如果開機起來看到的是live iso的畫面的話，選擇 “Boot from existing OS” 開機，然後把你的live iso拔掉。&lt;/p&gt;
+
+&lt;h1 id=&quot;references&quot;&gt;References&lt;/h1&gt;
+&lt;ul&gt;
+  &lt;li&gt;官網教學: https://wiki.archlinux.org/title/Installation_guide&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        <pubDate>Fri, 02 Jul 2021 00:00:00 +0800</pubDate>
+        <link>http://chenkb91.github.io/notes/2021/07/02/arch-install-guide.html</link>
+        <guid isPermaLink="true">http://chenkb91.github.io/notes/2021/07/02/arch-install-guide.html</guid>
+        
+        <category>Arch</category>
+        
+        
+        <category>notes</category>
+        
+      </item>
     
       <item>
         <title>NASA 2021 Homework 1 Notes</title>
