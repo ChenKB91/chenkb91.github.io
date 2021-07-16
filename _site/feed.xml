@@ -5,8 +5,8 @@
     <description>Notes, blogs, random posts about random things</description>
     <link>http://chenkb91.github.io/</link>
     <atom:link href="http://chenkb91.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 02 Jul 2021 16:28:51 +0800</pubDate>
-    <lastBuildDate>Fri, 02 Jul 2021 16:28:51 +0800</lastBuildDate>
+    <pubDate>Fri, 16 Jul 2021 10:59:40 +0800</pubDate>
+    <lastBuildDate>Fri, 16 Jul 2021 10:59:40 +0800</lastBuildDate>
     <generator>Jekyll v4.1.1</generator>
     
       <item>
@@ -17,7 +17,7 @@
 &lt;p&gt;本篇文章從&lt;a href=&quot;https://wiki.archlinux.org/title/Installation_guide&quot;&gt;官網教學&lt;/a&gt;節錄而來，使用 &lt;strong&gt;BIOS&lt;/strong&gt; 系統（大部分VM軟體預設是這個）的安裝過程。打開你喜歡的 VM 軟體，用抓下來的 Live iso 開機之後，進行以下步驟。&lt;/p&gt;
 
 &lt;h1 id=&quot;步驟&quot;&gt;步驟&lt;/h1&gt;
-
+&lt;hr /&gt;
 &lt;h2 id=&quot;disk-partition&quot;&gt;Disk Partition&lt;/h2&gt;
 
 &lt;p&gt;先用&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;lsblk&lt;/code&gt;看一下你的磁碟叫什麼名字，然後進行分割的動作:&lt;/p&gt;
@@ -85,8 +85,7 @@ visudo &lt;span class=&quot;c&quot;&gt;# if you want to give it sudo, add line: 
 
 &lt;p&gt;裝Grub，要不然開不了機。&lt;/p&gt;
 
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# use lsblk to check where the bios partition is at (the 1MB one)&lt;/span&gt;
-grub-install &lt;span class=&quot;nt&quot;&gt;--target&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;i386-pc /dev/sda1
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;grub-install &lt;span class=&quot;nt&quot;&gt;--target&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;i386-pc /dev/sda
 grub-mkconfig &lt;span class=&quot;nt&quot;&gt;-o&lt;/span&gt; /boot/grub/grub.cfg
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
@@ -104,6 +103,7 @@ reboot
 &lt;h1 id=&quot;references&quot;&gt;References&lt;/h1&gt;
 &lt;ul&gt;
   &lt;li&gt;官網教學: https://wiki.archlinux.org/title/Installation_guide&lt;/li&gt;
+  &lt;li&gt;PastLeo - ArchLinux 2020 安裝筆記: https://pastleo.me/post/20200719-arch-linux-installation&lt;/li&gt;
 &lt;/ul&gt;
 </description>
         <pubDate>Fri, 02 Jul 2021 00:00:00 +0800</pubDate>

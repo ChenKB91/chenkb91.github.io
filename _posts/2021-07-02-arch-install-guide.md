@@ -13,7 +13,7 @@ categories: notes
 本篇文章從[官網教學](https://wiki.archlinux.org/title/Installation_guide)節錄而來，使用 **BIOS** 系統（大部分VM軟體預設是這個）的安裝過程。打開你喜歡的 VM 軟體，用抓下來的 Live iso 開機之後，進行以下步驟。
 
 # 步驟
-
+---
 ## Disk Partition
 
 先用`lsblk`看一下你的磁碟叫什麼名字，然後進行分割的動作:
@@ -78,8 +78,7 @@ visudo # if you want to give it sudo, add line: ckb ALL=(ALL) ALL
 裝Grub，要不然開不了機。
 
 ```bash
-# use lsblk to check where the bios partition is at (the 1MB one)
-grub-install --target=i386-pc /dev/sda1
+grub-install --target=i386-pc /dev/sda
 grub-mkconfig -o /boot/grub/grub.cfg
 ```
 
@@ -97,3 +96,4 @@ reboot
 
 # References
 - 官網教學: https://wiki.archlinux.org/title/Installation_guide
+- PastLeo - ArchLinux 2020 安裝筆記: https://pastleo.me/post/20200719-arch-linux-installation
