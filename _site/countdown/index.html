@@ -1,0 +1,92 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<title>Communist Bomb</title>
+		<link rel="stylesheet" href="style.css">
+		<meta charset="UTF-8">
+		<script type="text/javascript">
+		  var imageURLs = [
+		       "spinning_comm.gif"
+		     , "spinning_bomb2.gif"
+		     , "spinning_grenade.gif"
+		     , "grenade3.gif"
+		  ];
+		  function getImageTag() {
+		    var img = '<IMG STYLE=\"position:absolute; TOP:15%; LEFT:55%; HEIGHT:40%;\" SRC=\"';
+		    var randomIndex = Math.floor(Math.random() * imageURLs.length);
+		    img += imageURLs[randomIndex];
+		    img += '\">';
+		    return img;
+		  }
+		</script>
+	</head>
+	<body>
+		
+		<h1><p id="rand_text"></p><br><br><br><br></h1>
+		<!-- <span style ="font-size:50px; font-family:sans-serif; text-align: right;"><h1></h1></span> -->
+		
+		<!-- <span style ="font-size:200px; font-family:Digital; text-align: right;"><br>
+			<p id="time_span"></p>
+		</span> -->
+		<span style ="font-size:8em; font-family:Verdana; text-align: center;"><br>
+			<p id="countdown_time"></p>
+		</span>s
+
+			<script type="text/javascript">
+			  document.write(getImageTag());
+			</script>
+			<!-- <IMG STYLE="position:absolute; TOP:150px; LEFT:650px; WIDTH:350px; HEIGHT:350px" SRC="spinning_bomb2.gif"> -->
+			<script>
+				function updateTime(){
+				var currentTime = new Date();
+				var examTime = new Date("Jul 3, 2020 8:40:00");
+				var nowHours = currentTime.getHours();
+				var nowMinutes = currentTime.getMinutes();
+				var nowSeconds = currentTime.getSeconds();
+				if (nowMinutes < 10){
+				nowMinutes = "0" + nowMinutes;
+				}
+				if (nowSeconds < 10){
+				nowSeconds = "0" + nowSeconds;
+				}
+				var t_str = nowHours + ":" + nowMinutes + ":" + nowSeconds + ' ';
+				
+				var distance = examTime.getTime() - currentTime.getTime();
+
+				var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+  				var countdownHrs = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  				var countdownMin = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+				var countdownSec = Math.floor((distance % (1000 * 60)) / 1000);
+				if(countdownHrs < 10){
+					countdownHrs = "0" + countdownHrs
+				}
+				if (countdownMin < 10){
+				countdownMin = "0" + countdownMin;
+				}
+				if (countdownSec < 10){
+				countdownSec = "0" + countdownSec;
+				}
+
+				var cd_str = days + "D " + countdownHrs + ":" + countdownMin + ":" + countdownSec + " ";
+
+				// document.getElementById('time_span').innerHTML = t_str;
+				document.getElementById('countdown_time').innerHTML = cd_str;
+				}
+				var textArray = [
+  				'距離禹廷爆炸剩餘:',
+    			'指考倒數:',
+    			'指考倒數:',
+    			'指考倒數:',
+    			'指考倒數:'
+				];
+				var randomNumber = Math.floor(Math.random()*textArray.length);
+
+				document.getElementById('rand_text').innerHTML = textArray[randomNumber];
+				
+				setInterval(updateTime, 1000);
+			</script>
+			<!-- <audio controls autoplay>
+				<source src="soviet_anthem.mp3" type="audio/mpeg">
+			</audio> -->
+		</body>
+	</html>

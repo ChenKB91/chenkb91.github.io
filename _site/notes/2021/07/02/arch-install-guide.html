@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>How to quickly setup an Archlinux VM | CKB's Stash</title>
+  <meta name="description" content="測試東西的時候常需要一個很簡單的 Linux VM，剛好 Arch 的檔案小，安裝速度也快，為了以後不要再採坑，寫了這篇筆記來簡單紀錄一下怎麼用 Live iso 安裝 Archlinux.">
+
+  <!-- evil icon -->
+
+  <link rel="stylesheet" href="/assets/evil-icons.min.css">
+  <script src="/assets/evil-icons.min.js"></script>
+
+  <!-- todo: include this into main.css -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans+TC">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu+Mono">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="shortcut icon" type="image/png" href="/assets/favicon.png">
+  <link rel="canonical" href="http://chenkb91.github.io/notes/2021/07/02/arch-install-guide.html">
+  <link rel="alternate" type="application/rss+xml" title="CKB's Stash" href="http://chenkb91.github.io/feed.xml">
+  
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Y072K5YWXX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-Y072K5YWXX');
+</script>
+
+
+</head>
+
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+  <body>
+    <div class="page-content">
+      <div class="container">
+        <div class="three columns">
+          <header class="site-header">
+
+  <h2 class="logo"><a href="/">CKB's Stash</a></h2>
+  <div class="motto">Notes, blogs, random posts about random things </h4>
+  <div class="nav">
+    
+    <label for="menu-toggle" class="menu-icon">
+        <!-- <div data-icon="ei-navicon"></div> -->
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+    </label>
+    <input type="checkbox" id="menu-toggle">
+
+    <div class="site-nav">
+      <nav>
+        <ul class="page-link">
+          <li><a href="/">Home</a></li>
+          <li><a href="/archive">Archive</a></li>
+          <li><a href="/about">About</a></li>
+          <li><a href="/other">Other projects</a></li>
+          <li><a href="/feed.xml">RSS</a></li>
+        </ul>
+      </nav>
+    </div>
+
+  </div>
+</header>
+
+        </div>
+
+        <div class="nine columns" style="z-index:100;">
+          <div class="wrapper">
+            <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="article_header">
+    <h1 class="article_title" itemprop="name headline">How to quickly setup an Archlinux VM</h1>
+    <p class="article_meta"><time datetime="2021-07-02T00:00:00+08:00" itemprop="datePublished">2021·7·2</time></p>
+  </header>
+
+  <div class="article-content" itemprop="articleBody">
+    <p>測試東西的時候常需要一個很簡單的 Linux VM，剛好 Arch 的檔案小，安裝速度也快，為了以後不要再採坑，寫了這篇筆記來簡單紀錄一下怎麼用 Live iso 安裝 Archlinux.
+<!--description--></p>
+
+<p>本篇文章從<a href="https://wiki.archlinux.org/title/Installation_guide">官網教學</a>節錄而來，使用 <strong>BIOS</strong> 系統（大部分VM軟體預設是這個）的安裝過程。打開你喜歡的 VM 軟體，用抓下來的 Live iso 開機之後，進行以下步驟。</p>
+
+<h1 id="步驟">步驟</h1>
+<hr />
+<h2 id="disk-partition">Disk Partition</h2>
+
+<p>先用<code class="language-plaintext highlighter-rouge">lsblk</code>看一下你的磁碟叫什麼名字，然後進行分割的動作:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>fdisk /dev/sda   <span class="c"># Or whatever the disk is called</span>
+</code></pre></div></div>
+
+<p>我們需要至少三個Partition:</p>
+
+<ol>
+  <li>1MB for <code class="language-plaintext highlighter-rouge">BIOS Boot</code> (No need to choose type)</li>
+  <li>256MB Swap, choose <code class="language-plaintext highlighter-rouge">swap</code> type in fdisk</li>
+  <li>Use rest of the space as one partition</li>
+</ol>
+
+<h3 id="formatting">Formatting</h3>
+<p>再來我們需要把這些 Partition 格式化。</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mkswap /dev/sda2  <span class="c"># 處理swap</span>
+swapon /dev/sda2
+mkfs.ext4 /dev/sda3 <span class="c"># 建立檔案系統</span>
+</code></pre></div></div>
+<p>然後掛載到<code class="language-plaintext highlighter-rouge">/mnt</code>。</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">mount /dev/sda3 /mnt</code></li>
+</ul>
+
+<h2 id="install-using-pacstrap">Install using pacstrap</h2>
+
+<p><code class="language-plaintext highlighter-rouge">pacstrap /mnt ...</code> 可以幫我們裝好很多東西。</p>
+
+<ul>
+  <li><strong>TL;DR</strong>: <code class="language-plaintext highlighter-rouge">pacstrap /mnt base linux linux-firmware networkmanager grub sudo vim</code></li>
+</ul>
+
+<p>解釋一下：</p>
+
+<ul>
+  <li>基本的 Linux 要用的東西: <code class="language-plaintext highlighter-rouge">base linux linux-firmware</code></li>
+  <li>網路自動設定，不然會連不到: <code class="language-plaintext highlighter-rouge">networkmanager</code></li>
+  <li>既然都要裝東西了那就順便: <code class="language-plaintext highlighter-rouge">grub sudo vim</code></li>
+</ul>
+
+<h2 id="fstab-arch-chroot-systemd">fstab, arch-chroot, systemd</h2>
+
+<p>設定開機自動mount，並設定網路。接下來的步驟要在新的檔案系統裡做，所以要<code class="language-plaintext highlighter-rouge">arch-chroot</code>：</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>genfstab <span class="nt">-U</span> /mnt <span class="o">&gt;&gt;</span> /mnt/etc/fstab
+arch-chroot /mnt
+systemctl <span class="nb">enable </span>NetworkManager
+</code></pre></div></div>
+
+<h2 id="user-and-password">User and password</h2>
+
+<p>設定root的密碼，建立新的使用者。</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>passwd  <span class="c"># change root pw</span>
+
+<span class="c"># 如果你要建立使用者的話才做，不用的話可以跳過</span>
+useradd ckb <span class="c"># 當然你要把ckb換成自己的使用者名稱</span>
+<span class="nb">mkdir</span> <span class="nt">-p</span> /home/ckb
+<span class="nb">chown </span>ckb:ckb /home/ckb
+visudo <span class="c"># if you want to give it sudo, add line: ckb ALL=(ALL) ALL</span>
+</code></pre></div></div>
+
+<h2 id="grub">GRUB</h2>
+
+<p>裝Grub，要不然開不了機。</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>grub-install <span class="nt">--target</span><span class="o">=</span>i386-pc /dev/sda
+grub-mkconfig <span class="nt">-o</span> /boot/grub/grub.cfg
+</code></pre></div></div>
+
+<h2 id="finishing-up">Finishing up</h2>
+
+<p>退出arch-chroot，然後重新開機。</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">exit</span> <span class="c"># from chroot</span>
+umount <span class="nt">-R</span> /mnt
+reboot
+</code></pre></div></div>
+
+<p>這樣子就裝好了，如果開機起來看到的是live iso的畫面的話，選擇 “Boot from existing OS” 開機，然後把你的live iso拔掉。</p>
+
+<h1 id="references">References</h1>
+<ul>
+  <li>官網教學: https://wiki.archlinux.org/title/Installation_guide</li>
+  <li>PastLeo - ArchLinux 2020 安裝筆記: https://pastleo.me/post/20200719-arch-linux-installation</li>
+</ul>
+
+  </div>
+
+  <footer class="article-footer">
+
+  <!-- <section class="share">
+  <a class="share-link" href="" onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+    Twitter
+  </a>
+  <a class="share-link" href="" onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+    Facebook
+  </a>
+  <a class="share-link" href="" onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530'); return false;">
+    Google+
+  </a> 
+</section>
+ -->
+
+  <!-- <hr/> -->
+
+  <section class="author">
+  <div class="authorimage box" style="background: url(/assets/favicon.png)"></div>
+  <div class="authorinfo box">
+    <p>Author | Chen KB</p>
+    <p class="bio">
+      Article URL: <code>http://chenkb91.github.io/notes/2021/07/02/arch-install-guide.html</code>
+    </p>
+  </div>
+</section>
+
+
+  </footer>
+
+  <!-- 
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+    var disqus_shortname  = 'chenkb';
+    var disqus_identifier = '/notes/2021/07/02/arch-install-guide';
+    (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+  </script>
+
+ -->
+
+</article>
+
+          </div>
+        </div>
+      </div>
+      <footer class="site-footer">
+  <div class="container">
+    <div class="footer left column one-half">
+      <section class="small-font">
+        © 2019 Chen KB.  
+        Powered by <a href="https://github.com/jekyll/jekyll">jekyll</a> & <span style="color:red">❤</span>
+      </section>
+    </div>
+
+    <div class="footer right column one-half">
+      <section class="small-font">
+        
+        <a href="https://github.com/ChenKB91"><span class="icon icon--github"><svg viewBox="0 0 16 16"><path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/></svg>
+</span></a>
+
+        
+        
+      </section>
+    </div>
+  </div>
+</footer>
+ 
+    </div>
+  </body>
+</html>

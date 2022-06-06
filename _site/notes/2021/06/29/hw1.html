@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>NASA 2021 Homework 1 Notes | CKB's Stash</title>
+  <meta name="description" content="本次的作業主題為網路封包分析工具，以及Shell script。我主要用Wireshark來做這題，因為我太廢不會用tcp dump，Shell script的部分時間有點趕沒寫DFS的部分，然後前面的一些地方也可能有錯Q_Q">
+
+  <!-- evil icon -->
+
+  <link rel="stylesheet" href="/assets/evil-icons.min.css">
+  <script src="/assets/evil-icons.min.js"></script>
+
+  <!-- todo: include this into main.css -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans+TC">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu+Mono">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="shortcut icon" type="image/png" href="/assets/favicon.png">
+  <link rel="canonical" href="http://chenkb91.github.io/notes/2021/06/29/hw1.html">
+  <link rel="alternate" type="application/rss+xml" title="CKB's Stash" href="http://chenkb91.github.io/feed.xml">
+  
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Y072K5YWXX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-Y072K5YWXX');
+</script>
+
+
+</head>
+
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+  <body>
+    <div class="page-content">
+      <div class="container">
+        <div class="three columns">
+          <header class="site-header">
+
+  <h2 class="logo"><a href="/">CKB's Stash</a></h2>
+  <div class="motto">Notes, blogs, random posts about random things </h4>
+  <div class="nav">
+    
+    <label for="menu-toggle" class="menu-icon">
+        <!-- <div data-icon="ei-navicon"></div> -->
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+    </label>
+    <input type="checkbox" id="menu-toggle">
+
+    <div class="site-nav">
+      <nav>
+        <ul class="page-link">
+          <li><a href="/">Home</a></li>
+          <li><a href="/archive">Archive</a></li>
+          <li><a href="/about">About</a></li>
+          <li><a href="/other">Other projects</a></li>
+          <li><a href="/feed.xml">RSS</a></li>
+        </ul>
+      </nav>
+    </div>
+
+  </div>
+</header>
+
+        </div>
+
+        <div class="nine columns" style="z-index:100;">
+          <div class="wrapper">
+            <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="article_header">
+    <h1 class="article_title" itemprop="name headline">NASA 2021 Homework 1 Notes</h1>
+    <p class="article_meta"><time datetime="2021-06-29T00:00:00+08:00" itemprop="datePublished">2021·6·29</time></p>
+  </header>
+
+  <div class="article-content" itemprop="articleBody">
+    <p>本次的作業主題為網路封包分析工具，以及Shell script。我主要用Wireshark來做這題，<del>因為我太廢不會用tcp dump</del>，Shell script的部分時間有點趕沒寫DFS的部分，然後前面的一些地方也可能有錯Q_Q
+<!--description--></p>
+<ul>
+  <li>題目: https://github.com/ChenKB91/nasa-2021-csie/blob/main/hw1/b09902011.pdf</li>
+  <li>官方解答: https://hackmd.io/@uqzWTXyyTk6IYTBwcPwnoA/HJka804N_</li>
+</ul>
+
+<h2 id="na">NA</h2>
+
+<h4 id="野生的密碼難道會在網路上赤裸地奔馳著">野生的密碼難道會在網路上赤裸地奔馳著？</h4>
+
+<p>本題提供了兩個版本的網站，一個用http一個用https，網站上有個輸入密碼的欄位，http的版本可以直接用wireshark攔截到。</p>
+
+<ol>
+  <li>
+    <p>We can simply filter by http and get this, since http don’t do encryption:</p>
+
+    <p><img src="/assets/img/2021-06-29/httppw.png" style="zoom: 67%;" /></p>
+  </li>
+  <li>
+    <p>This version uses https, which encrypts requests &amp; responses, so we can’t get our password from Wireshark.</p>
+
+    <p><img src="/assets/img/2021-06-29/https.png" alt="https" style="zoom:67%;" /></p>
+  </li>
+</ol>
+
+<h4 id="好玩遊戲也有暗潮洶湧的一面">好玩遊戲也有暗潮洶湧的一面</h4>
+
+<p>本題提供了一個Ubuntu虛擬機，打開之後可以執行<code class="language-plaintext highlighter-rouge">./client-linux</code>來玩一個乒乓球遊戲，虛擬機也載了Wireshark，可以直接拿來用。</p>
+
+<ol>
+  <li>
+    <p>We can use “Conversations &gt; Follow Stream” to inspect these conversations while we play:</p>
+
+    <p><img src="/assets/img/2021-06-29/stream.png" alt="stream" style="zoom:67%;" /></p>
+
+    <p>We can also view only data sent by our side:</p>
+
+    <p><img src="/assets/img/2021-06-29/client.png" style="zoom:67%;" /></p>
+
+    <p>So basically, the game server sent us the time, the ball and the pad’s location, and the client send directions when we press move.</p>
+  </li>
+  <li>
+    <p>If we pay attention to the conversations page, we can notice at some point there’s another conversation happening on port 9394:</p>
+
+    <p><img src="/assets/img/2021-06-29/conversations.png" alt="conversations" /></p>
+
+    <p>And when we look into it we’ll discover this:</p>
+
+    <p><img src="/assets/img/2021-06-29/secret.png" style="zoom:67%;" /></p>
+
+    <p>So we know the game steals our .bash_history.</p>
+  </li>
+  <li>
+    <p>We repeat the above steps with the pcap:</p>
+
+    <p><img src="/assets/img/2021-06-29/secret2.png" alt="secret2" style="zoom:67%;" /></p>
+
+    <p><code class="language-plaintext highlighter-rouge">PASSWORD=WoBuHueA_WoJiouJenDeBuHueA</code></p>
+  </li>
+  <li>
+    <p>I wrote a quick python program to communicate with the server, since we already know the port and the format:</p>
+
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">socket</span>
+<span class="n">host</span> <span class="o">=</span> <span class="s">'127.0.0.1'</span>
+<span class="n">port</span> <span class="o">=</span> <span class="mi">9393</span>
+   
+<span class="k">with</span> <span class="n">socket</span><span class="p">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="p">.</span><span class="n">AF_INET</span><span class="p">,</span><span class="n">socket</span><span class="p">.</span><span class="n">SOCK_STREAM</span><span class="p">)</span> <span class="k">as</span> <span class="n">s</span><span class="p">:</span>
+  <span class="n">s</span><span class="p">.</span><span class="n">connect</span><span class="p">((</span><span class="n">host</span><span class="p">,</span><span class="n">port</span><span class="p">))</span>
+  <span class="k">print</span><span class="p">(</span><span class="s">'connected'</span><span class="p">)</span>
+  <span class="n">s</span><span class="p">.</span><span class="n">sendall</span><span class="p">(</span><span class="sa">b</span><span class="s">'start fast'</span><span class="p">)</span>
+  <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">1024</span><span class="p">).</span><span class="n">decode</span><span class="p">(</span><span class="s">'ascii'</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s">'hori'</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+      <span class="c1"># Stop when recieving anything not game data
+</span>      <span class="k">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+      <span class="k">break</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="s">'</span><span class="se">\n</span><span class="s">'</span><span class="p">)</span>
+      <span class="c1"># Make sure it don't explode when server asks for secret
+</span>      <span class="n">plus</span> <span class="o">=</span> <span class="mi">0</span>
+      <span class="k">if</span> <span class="s">'secret'</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+        <span class="n">plus</span> <span class="o">=</span> <span class="mi">1</span>
+           
+      <span class="n">x</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="o">+</span><span class="n">plus</span><span class="p">].</span><span class="n">split</span><span class="p">(</span><span class="s">' '</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+      <span class="n">y</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="o">+</span><span class="n">plus</span><span class="p">].</span><span class="n">split</span><span class="p">(</span><span class="s">' '</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+      <span class="n">bx</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">2</span><span class="o">+</span><span class="n">plus</span><span class="p">].</span><span class="n">split</span><span class="p">(</span><span class="s">' '</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+      <span class="n">by</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">3</span><span class="o">+</span><span class="n">plus</span><span class="p">].</span><span class="n">split</span><span class="p">(</span><span class="s">' '</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+      <span class="n">t</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">4</span><span class="o">+</span><span class="n">plus</span><span class="p">].</span><span class="n">split</span><span class="p">(</span><span class="s">' '</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+   		
+      <span class="k">if</span> <span class="n">x</span><span class="o">&lt;</span><span class="n">bx</span><span class="p">:</span> <span class="n">s</span><span class="p">.</span><span class="n">sendall</span><span class="p">(</span><span class="sa">b</span><span class="s">'Move: right'</span><span class="p">);</span><span class="k">print</span><span class="p">(</span><span class="s">'r'</span><span class="p">)</span>
+      <span class="k">elif</span> <span class="n">x</span><span class="o">&gt;</span><span class="n">bx</span><span class="p">:</span> <span class="n">s</span><span class="p">.</span><span class="n">sendall</span><span class="p">(</span><span class="sa">b</span><span class="s">'Move: left'</span><span class="p">);</span><span class="k">print</span><span class="p">(</span><span class="s">'l'</span><span class="p">)</span>
+      <span class="k">elif</span> <span class="n">y</span><span class="o">&gt;</span><span class="n">by</span><span class="p">:</span> <span class="n">s</span><span class="p">.</span><span class="n">sendall</span><span class="p">(</span><span class="sa">b</span><span class="s">'Move: up'</span><span class="p">);</span><span class="k">print</span><span class="p">(</span><span class="s">'u'</span><span class="p">)</span>
+      <span class="k">elif</span> <span class="n">y</span><span class="o">&lt;</span><span class="n">by</span><span class="p">:</span> <span class="n">s</span><span class="p">.</span><span class="n">sendall</span><span class="p">(</span><span class="sa">b</span><span class="s">'Move: down'</span><span class="p">);</span><span class="k">print</span><span class="p">(</span><span class="s">'d'</span><span class="p">)</span>
+</code></pre></div>    </div>
+
+    <p>Got the flag: <code class="language-plaintext highlighter-rouge">HW1{d0_y0u_knovv_wH0_KaienLin_1s?}</code></p>
+
+    <p><img src="/assets/img/2021-06-29/winbypy.png" alt="winbypy" style="zoom:80%;" /></p>
+  </li>
+  <li>
+    <p>I’m too lazy to modify the program to play with 2 balls… Using <code class="language-plaintext highlighter-rouge">netstat -tulpn</code> we can find the server running on port 9393, then copy it. We already know the flag format, so…</p>
+
+    <p><img src="/assets/img/2021-06-29/stringsgrep.png" alt="" /></p>
+
+    <p>Flag: <code class="language-plaintext highlighter-rouge">HW1{Dou8l3_b@ll_d0uB1e_Fun!}</code></p>
+  </li>
+</ol>
+
+<h4 id="這麼多的網路協定要是能全部都認識的話該有多好">這麼多的網路協定要是能全部都認識的話該有多好</h4>
+
+<ol>
+  <li>
+    <p><img src="/assets/img/2021-06-29/ICMP.png" alt="" /></p>
+
+    <p>ICMP, or the Internet Control Message Protocol is used to send error messages and other informations, for figuring out networking issues. It is built on the Network Layer.</p>
+  </li>
+  <li>
+    <p><img src="/assets/img/2021-06-29/DNS.png" alt="" /></p>
+  </li>
+</ol>
+
+<p>DNS protocol is used to communicate with DNS servers, and figure out a domain’s IP address. It is built on the Application Layer.</p>
+
+<ol>
+  <li>
+    <p><img src="/assets/img/2021-06-29/ARP.png" alt="" /></p>
+
+    <p>The ARP protocol, or the Address Resolution Protocol, is used to in a local network to communicate MAC addresses. It is built on the Data Link Layer.</p>
+  </li>
+  <li>
+    <p><img src="/assets/img/2021-06-29/DHCP.png" alt="" /></p>
+  </li>
+</ol>
+
+<p>DHCP protocol, or Dynaic Host Configuration Protocol, is used to communicate with DHCP servers when connecting to it. It handles the process of getting an IP address inside a network.</p>
+
+<h2 id="sa">SA</h2>
+
+<p>我寫的Shell script:</p>
+<ul>
+  <li>P1: https://github.com/ChenKB91/nasa-2021-csie/blob/main/hw1/p1.sh</li>
+  <li>P2: https://github.com/ChenKB91/nasa-2021-csie/blob/main/hw1/p2.sh</li>
+  <li>P3: https://github.com/ChenKB91/nasa-2021-csie/blob/main/hw1/p3.sh</li>
+</ul>
+
+  </div>
+
+  <footer class="article-footer">
+
+  <!-- <section class="share">
+  <a class="share-link" href="" onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+    Twitter
+  </a>
+  <a class="share-link" href="" onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+    Facebook
+  </a>
+  <a class="share-link" href="" onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530'); return false;">
+    Google+
+  </a> 
+</section>
+ -->
+
+  <!-- <hr/> -->
+
+  <section class="author">
+  <div class="authorimage box" style="background: url(/assets/favicon.png)"></div>
+  <div class="authorinfo box">
+    <p>Author | Chen KB</p>
+    <p class="bio">
+      Article URL: <code>http://chenkb91.github.io/notes/2021/06/29/hw1.html</code>
+    </p>
+  </div>
+</section>
+
+
+  </footer>
+
+  <!-- 
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+    var disqus_shortname  = 'chenkb';
+    var disqus_identifier = '/notes/2021/06/29/hw1';
+    (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+  </script>
+
+ -->
+
+</article>
+
+          </div>
+        </div>
+      </div>
+      <footer class="site-footer">
+  <div class="container">
+    <div class="footer left column one-half">
+      <section class="small-font">
+        © 2019 Chen KB.  
+        Powered by <a href="https://github.com/jekyll/jekyll">jekyll</a> & <span style="color:red">❤</span>
+      </section>
+    </div>
+
+    <div class="footer right column one-half">
+      <section class="small-font">
+        
+        <a href="https://github.com/ChenKB91"><span class="icon icon--github"><svg viewBox="0 0 16 16"><path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/></svg>
+</span></a>
+
+        
+        
+      </section>
+    </div>
+  </div>
+</footer>
+ 
+    </div>
+  </body>
+</html>
