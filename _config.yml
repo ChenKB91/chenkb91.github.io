@@ -31,5 +31,8 @@ excerpt_separator: <!--description-->
 # for faster re-render
 # incremental: true
 
+# Do not skip posts with future dates.
+future: true
+
 plugins:
   - jekyll-seo-tag
