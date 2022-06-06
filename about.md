@@ -4,11 +4,14 @@ title:  "About"
 permalink: "/about/"
 ---
 
-## What is this site?
-I'm CKB, a student from Taiwan. Soon I will major in CSIE in uni, so I made this blog, to hopefully aid and record my learning, 
-while learning some basic web design as well.
+# 關於我
+## 學歷
+* 2020: 台大資訊系
+* 2017~2019: 建國中學數理資優班
+## 技能
+* C/C++, Python
+* Ability to find cute cats online and stare at them all day
 
-## If you're from Taiwan, why are you writing in English?
-I do know my English is not very fluent, but since it's easier to switch between code and article if I write in English, I might as well just compromise.
-
-[My Github](https://github.com/ChenKB91)
+# 聯絡資訊
+* [Github](https://github.com/ChenKB91)
+* [Linkedin](https://www.linkedin.com/in/%E5%8F%AF%E9%82%A6-%E9%99%B3-aba290223/)

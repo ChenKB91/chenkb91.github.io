@@ -13,8 +13,7 @@ baseurl: "" # the subpath of your site, e.g. /blog
 url: "http://chenkb91.github.io" # the base hostname & protocol for your site
 twitter_username: 
 github_username:  ChenKB91
-motto: "C'est la lutte finale, 
-groupons-nous, et demain..."
+motto: "What is life but a chaotic show? If you've got a cat, then you get a chaotic show with a cat, which makes everything justified."
 
 # Build settings
 markdown: kramdown
@@ -23,7 +22,7 @@ kramdown:
 
 # Third-party services
 # just leave someone empty to disable it
-# google_analytics: 
+google_analytics: G-Y072K5YWXX
 disqus_shortname: chenkb
 
 # used this for post_excerpt at index_page
