@@ -8,6 +8,7 @@
 # Site settings
 title: CKB's Stash
 email: bensoncat99@gmail.com
+author_name: Chen KB
 description: "Notes, blogs, random posts about random things"
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "http://chenkb91.github.io" # the base hostname & protocol for your site
@@ -34,5 +35,16 @@ excerpt_separator: <!--description-->
 # Do not skip posts with future dates.
 future: true
 
+toc:
+  min_level: 2
+  max_level: 4
+
+defaults:
+  - scope:
+      path: ""
+    values:
+      toc: true
+
 plugins:
   - jekyll-seo-tag
+  - jekyll-toc

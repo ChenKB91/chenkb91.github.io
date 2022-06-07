@@ -25,6 +25,9 @@
         </ul>
       </nav>
     </div>
-
   </div>
+  </div>
+    {% if page.toc %}
+    {{ page.content | toc_only }}
+    {% endif %}
 </header>

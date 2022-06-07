@@ -196,7 +196,7 @@ input#menu-toggle {
 
 
 .site-header {
-  text-align:right;
+  text-align: right;
   @include media-query($on-laptop){
     text-align: center;
     margin-bottom: 40px;
@@ -204,6 +204,23 @@ input#menu-toggle {
   nav a {
     font-weight:400;
   }
+}
+
+.section-nav .toc-entry{
+    text-align: left;
+    list-style: none;
+    font-size: $small-font-size;
+    margin: 0;
+    a {
+      color: $grey-color;
+    }
+    a:hover {
+      color: $sec-color;
+    }
+}
+
+.section-nav {
+  border-left: 1px solid $grey-color-dark;
 }
 
 .post {
