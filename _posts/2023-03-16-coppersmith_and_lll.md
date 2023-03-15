@@ -10,7 +10,7 @@ categories: notes
 # Coppersmith's method 及 LLL algorithm
 
 上學期修了計安，打了一堆CTF的同時，也認識到了Coppersmith以及LLL這系列的密碼學魔法，但是由於我理解力不足，所以花了很久的時間才稍微了解一點，因此寫這篇文來紀錄一下免得又忘記XD。
-
+<!--description-->
 ## Introduction
 
 在做一些題目的時候很常遇到要解類似下面的方程式：
