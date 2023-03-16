@@ -47,6 +47,7 @@ $$
 
 
 令 $g(x)$ 為一個單變數 $d$ 次多項式，$m\in\mathbb{N}$， 則若滿足
+
 $$
 g(x_0)=0 \mod{N^m} \ \text{ where }x_0 \le X  \\
 \vert \vert g(xX)\vert \vert <\frac{N^m}{\sqrt d}
