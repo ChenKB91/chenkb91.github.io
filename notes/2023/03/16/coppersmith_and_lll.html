@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Coppersmith & LLL algorithm 筆記 | CKB's Stash</title>
+  <meta name="description" content="Coppersmith’s method 及 LLL algorithm上學期修了計安，打了一堆CTF的同時，也認識到了Coppersmith以及LLL這系列的密碼學魔法，但是由於我理解力不足，所以花了很久的時間才稍微了解一點，因此寫這篇文來紀錄一下免得又忘記XD。">
+
+  <!-- evil icon -->
+
+  <link rel="stylesheet" href="/assets/evil-icons.min.css">
+  <script src="/assets/evil-icons.min.js"></script>
+
+  <!-- todo: include this into main.css -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans+TC">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu+Mono">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="shortcut icon" type="image/png" href="/assets/favicon.png">
+  <link rel="canonical" href="http://chenkb91.github.io/notes/2023/03/16/coppersmith_and_lll.html">
+  <link rel="alternate" type="application/rss+xml" title="CKB's Stash" href="http://chenkb91.github.io/feed.xml">
+  <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Coppersmith &amp; LLL algorithm 筆記 | CKB’s Stash</title>
+<meta name="generator" content="Jekyll v4.2.2" />
+<meta property="og:title" content="Coppersmith &amp; LLL algorithm 筆記" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Coppersmith’s method 及 LLL algorithm 上學期修了計安，打了一堆CTF的同時，也認識到了Coppersmith以及LLL這系列的密碼學魔法，但是由於我理解力不足，所以花了很久的時間才稍微了解一點，因此寫這篇文來紀錄一下免得又忘記XD。" />
+<meta property="og:description" content="Coppersmith’s method 及 LLL algorithm 上學期修了計安，打了一堆CTF的同時，也認識到了Coppersmith以及LLL這系列的密碼學魔法，但是由於我理解力不足，所以花了很久的時間才稍微了解一點，因此寫這篇文來紀錄一下免得又忘記XD。" />
+<link rel="canonical" href="http://chenkb91.github.io/notes/2023/03/16/coppersmith_and_lll.html" />
+<meta property="og:url" content="http://chenkb91.github.io/notes/2023/03/16/coppersmith_and_lll.html" />
+<meta property="og:site_name" content="CKB’s Stash" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2023-03-16T00:00:00+00:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Coppersmith &amp; LLL algorithm 筆記" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2023-03-16T00:00:00+00:00","datePublished":"2023-03-16T00:00:00+00:00","description":"Coppersmith’s method 及 LLL algorithm 上學期修了計安，打了一堆CTF的同時，也認識到了Coppersmith以及LLL這系列的密碼學魔法，但是由於我理解力不足，所以花了很久的時間才稍微了解一點，因此寫這篇文來紀錄一下免得又忘記XD。","headline":"Coppersmith &amp; LLL algorithm 筆記","mainEntityOfPage":{"@type":"WebPage","@id":"http://chenkb91.github.io/notes/2023/03/16/coppersmith_and_lll.html"},"url":"http://chenkb91.github.io/notes/2023/03/16/coppersmith_and_lll.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+  
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Y072K5YWXX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-Y072K5YWXX');
+</script>
+
+
+</head>
+
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$', '$'], ["\\(", "\\)"] ],
+        displayMath: [ ['$$', '$$'], ["\\[", "\\]"] ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+    </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+  <body>
+    <div class="page-content">
+      <div class="container">
+        <div class="three columns">
+          <header class="site-header">
+
+  <h2 class="logo"><a href="/">CKB's Stash</a></h2>
+  <div class="motto">Notes, blogs, random posts about random things </h4>
+  <div class="nav">
+    
+    <label for="menu-toggle" class="menu-icon">
+        <!-- <div data-icon="ei-navicon"></div> -->
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+    </label>
+    <input type="checkbox" id="menu-toggle">
+
+    <div class="site-nav">
+      <nav>
+        <ul class="page-link">
+          <li><a href="/">Home</a></li>
+          <li><a href="/archive">Archive</a></li>
+          <li><a href="/about">About</a></li>
+          <li><a href="/other">Other projects</a></li>
+          <li><a href="/feed.xml">RSS</a></li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+  </div>
+    
+    <ul id="toc" class="section-nav">
+<li class="toc-entry toc-h2"><a href="#introduction">Introduction</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#lll-algorithm">LLL algorithm</a></li>
+<li class="toc-entry toc-h3"><a href="#howgrave-graham-theorem">Howgrave-Graham Theorem</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#constructing-the-matrix">Constructing the matrix</a></li>
+<li class="toc-entry toc-h2"><a href="#when-can-coppersmiths-method-be-used">When can Coppersmith’s method be used?</a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#coppersmiths-theorem">Coppersmith’s theorem</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#conclusion">Conclusion</a></li>
+<li class="toc-entry toc-h2"><a href="#references">References</a></li>
+</ul>
+    
+</header>
+
+        </div>
+
+        <div class="nine columns" style="z-index:100;">
+          <div class="wrapper">
+            <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="article_header">
+    <h1 class="article_title" itemprop="name headline">Coppersmith & LLL algorithm 筆記</h1>
+    <p class="article_meta"><time datetime="2023-03-16T00:00:00+00:00" itemprop="datePublished">2023·3·16</time></p>
+  </header>
+
+  <div class="article-content" itemprop="articleBody">
+    <h1 id="coppersmiths-method-及-lll-algorithm">Coppersmith’s method 及 LLL algorithm</h1>
+
+<p>上學期修了計安，打了一堆CTF的同時，也認識到了Coppersmith以及LLL這系列的密碼學魔法，但是由於我理解力不足，所以花了很久的時間才稍微了解一點，因此寫這篇文來紀錄一下免得又忘記XD。
+<!--description--></p>
+<h2 id="introduction">Introduction</h2>
+
+<p>在做一些題目的時候很常遇到要解類似下面的方程式：</p>
+
+\[F(x)=x^n+a_{n-1}x^{n-1}+...+a_1x+a_0  \\
+\text{solve } F(x_0)\equiv0 \text{  (mod N) with }x_0&lt;X\]
+
+<p>若是改在 $\mathbb{Z}$ 上面要解這種多項式，方法很多，如 <a href="https://zh.wikipedia.org/wiki/%E7%89%9B%E9%A1%BF%E6%B3%95">Newton’s Method</a>。但我們是在 $\mathbb{Z}_N$，於是要想辦法轉移到 $\mathbb{Z}$ 去做這個問題。 也就是，我們想讓問題從 $F(x)=0 \mod{M}, x&lt;X$ 變成 $g(x)=0, x\in\mathbb{Z}$ 。</p>
+
+<h3 id="lll-algorithm">LLL algorithm</h3>
+
+<p>LLL 演算法，全名 Lenstra–Lenstra–Lovász Algorithm。本文不會說明他的內部實際運算過程。</p>
+
+<p>LLL 是用來計算 Shortest Vector Problem 的演算法，SVP 是 NP-Hard，所以它只會Approximate，但是可以在多項式時間內做完。基本概念是：給定幾個向量作為基底，在他們湊出來的離散 Lattice 中，試圖找出最短的向量。</p>
+
+<p>LLL 找到的向量 $\vec{v}$，Best case：</p>
+
+\[\vert \vert v\vert \vert  \le 2^{(n-1)/4}\vert \det{L}\vert ^{(1/n)}\]
+
+<p>Average case:</p>
+
+\[\vert \vert v\vert \vert  \le 1.02^n\vert \det{L}\vert ^{(1/n)}\]
+
+<h3 id="howgrave-graham-theorem">Howgrave-Graham Theorem</h3>
+
+<p>這裡要介紹一個定理，形式如下：</p>
+
+<p>令 $g(x)$ 為一個單變數 $d$ 次多項式，$m\in\mathbb{N}$， 則若滿足</p>
+
+\[g(x_0)=0 \mod{N^m} \ \text{ where }x_0 \le X  \\
+\vert \vert g(xX)\vert \vert &lt;\frac{N^m}{\sqrt d}\]
+
+<p>則</p>
+
+\[g(x_0)=0\]
+
+<p>在 $\mathbb{Z}$ 上也滿足。此處的 $\vert \vert g(xX)\vert \vert $ 指將 $g(xX)$ 展開後的係數當成一個向量算絕對值。</p>
+
+<p>換句話說，這個定理的意義其實很簡單：<em>只要 $g(x)$ 的係數向量長和 $x_0$ 的 Upper bound 夠小，就能直接把它當成在 $\mathbb{Z}$ 上解。</em></p>
+
+<p>因此，我們的目標便是找到一個函數 $g(x)$ ，使得當$x_0$滿足$f(x)=0 \mod N$ ，會有 $g(x_0)\in N^m\mathbb{Z}$，同時係數又要小。</p>
+
+<p>那麼我們要怎麼找到這個函數？</p>
+
+<blockquote>
+  <p>這個定理可以用柯西不等式證明，此處略過，若有需要請參考 Reference 的書。</p>
+</blockquote>
+
+<h2 id="constructing-the-matrix">Constructing the matrix</h2>
+
+<p>顯然 $f(x)$ 本身會符合條件，連帶的 $xf(x), x^2f(x)…$ 以及他們的常數倍也會符合。</p>
+
+<p>也容易看出 $g(x)\in N^m\mathbb{Z}+N^mx\mathbb{Z}+N^mx^2\mathbb{Z}+…$ 都會符合條件。把這個跟前面的$f(x)$加起來也明顯可以拿來用。</p>
+
+<p>換句話說，若把 ${N^m, N^mx, N^mx^2…, f(x),xf(x),…}$ 用來當作basis，線性組合湊出來的整個空間便可當作我們 $g(x)$ 的候選對象。</p>
+
+<p>由於前面 Howgrave-Graham 有 $\vert \vert g(xX)\vert \vert &lt;\frac{N^m}{\sqrt d}$ 這個限制，希望 $d$ 盡可能小，因此大於 $f(x)$ degree 的項，如 $N^mx^{n+1}$ 等可以不用，下個步驟會比較好做。</p>
+
+<p>接下來，我們必須想辦法利用 LLL 使 \(\vert \vert g(xX)\vert \vert\) 盡可能變小。隨便舉例，若要解 $(a+x_0)^2=c$可以這樣列：</p>
+
+\[B=\{N,Nx,f(x)\} \\
+f(x_0)=(a+x_0)^2-c=0 \\
+x_0 \le X\]
+
+<p>來建立矩陣，會變成：</p>
+
+\[B=\begin{bmatrix}
+X^2 &amp; 2aX &amp; a^2-c  \\
+&amp; NX \\
+&amp; &amp; N
+\end{bmatrix}\]
+
+<p>用 LLL 下去之後得到的向量，如果滿足 H-G Theorem 條件，把它當成多項式係數就可以用一般方法直接解了。(sage 可以用 <code class="language-plaintext highlighter-rouge">small_roots</code>)</p>
+
+<blockquote>
+  <p>如果想要的話，也可以乘起來做出 $x^2f(x)^2$之類的東西拿來當作基底，其他根據題目的不同也可以自己湊，重點是湊出的多項式要可以作到$g(x_0)=0$就好。ex. 如果現在 mod $p$，可以拿RSA的$N=pq$ 當作一個基底。發揮創意就對了。</p>
+</blockquote>
+
+<h2 id="when-can-coppersmiths-method-be-used">When can Coppersmith’s method be used?</h2>
+
+<p>這裡介紹另一個定理。</p>
+
+<h3 id="coppersmiths-theorem">Coppersmith’s theorem</h3>
+
+<p>給定 $d$ 次多項式 $f(x)$，可以快速找到 $f(r)=0 \mod N$ 的所有 $\vert r\vert &lt;N^{1/d}$ 的解。(就是用我們上面的方法)。</p>
+
+<p>這個定理基本上就是 LLL 的輸出向量長度上界 $\vert \vert v\vert \vert  \le 1.02^n\vert \det{L}\vert ^{(1/n)}$，加上 H-G 的 $\vert \vert g(xX)\vert \vert &lt;\frac{N}{\sqrt d}$ 而已。</p>
+
+<p>因此要判斷湊出來的矩陣能不能用，可以大概用</p>
+
+\[\vert \det L\vert ^{1/d} &lt; N\]
+
+<p>來算 $X$ 必須要多小才會夠。</p>
+
+<blockquote>
+  <p>有可能湊出來的矩陣會讓$X$的上限太小，這時候可以如前面說的發揮創意亂湊 basis，把矩陣次數弄大，有可能會讓上限突然變小也說不定 XD</p>
+
+  <p>另外，LLL 不一定要用在 Coppersmith 裡頭，有可能算出 $\vec{u}B=\vec{v}$，然後用 $u, v$ 裡頭透露出的某些東西就解掉了。</p>
+</blockquote>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>Coppersmith’s method 就是想辦法用一些手段，把一個在modular ring上面的求根問題，挪到整數上來做。這些手段包括利用 Howgrave-Graham 定理，以及用 LLL 做出符合條件的多項式，然後便能簡單求解。</p>
+
+<h2 id="references">References</h2>
+
+<ul>
+  <li>
+    <p><a href="http://hyperelliptic.org/tanja/teaching/crypto20/20200922-lll.pdf">Coppersmith / Howgrave-Graham and LLL, Tanja Lange, Eindhoven University of Technology.</a></p>
+  </li>
+  <li>
+    <p><a href="https://www.math.auckland.ac.nz/~sgal018/crypto-book/ch19.pdf">Chapter 19, Mathematics of Public Key Cryptography, Steven Galbraith.</a></p>
+  </li>
+</ul>
+
+  </div>
+
+  <footer class="article-footer">
+
+  <!-- <section class="share">
+  <a class="share-link" href="" onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+    Twitter
+  </a>
+  <a class="share-link" href="" onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+    Facebook
+  </a>
+  <a class="share-link" href="" onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530'); return false;">
+    Google+
+  </a> 
+</section>
+ -->
+
+  <!-- <hr/> -->
+
+  <section class="author">
+  <div class="authorimage box" style="background: url(/assets/favicon.png)"></div>
+  <div class="authorinfo box">
+    <p>Author | Chen KB</p>
+    <p class="bio">
+      Article URL: <code>http://chenkb91.github.io/notes/2023/03/16/coppersmith_and_lll.html</code>
+    </p>
+  </div>
+</section>
+
+
+  </footer>
+
+  <!-- 
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+    var disqus_shortname  = 'chenkb';
+    var disqus_identifier = '/notes/2023/03/16/coppersmith_and_lll';
+    (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+  </script>
+
+ -->
+
+</article>
+
+          </div>
+        </div>
+      </div>
+      <footer class="site-footer">
+  <div class="container">
+    <div class="footer left column one-half">
+      <section class="small-font">
+        © 2023 Chen KB.
+        Powered by <a href="https://github.com/jekyll/jekyll">jekyll</a>. Some rights reserved.</span>
+      </section>
+    </div>
+
+    <div class="footer right column one-half">
+      <section class="small-font">
+        
+        <a href="https://github.com/ChenKB91"><span class="icon icon--github"><svg viewBox="0 0 16 16"><path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/></svg>
+</span></a>
+
+        
+        
+      </section>
+    </div>
+  </div>
+</footer>
+ 
+    </div>
+  </body>
+</html>
